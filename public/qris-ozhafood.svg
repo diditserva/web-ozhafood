@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <rect width="300" height="360" fill="#ffffff" rx="16"/>
+  <!-- QRIS Header -->
+  <rect x="0" y="0" width="300" height="60" fill="#1c1917" rx="16"/>
+  <rect x="0" y="40" width="300" height="20" fill="#1c1917"/>
+  <text x="150" y="38" fill="#fbbf24" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="800" font-size="20" text-anchor="middle" letter-spacing="2">QRIS OZHA FOOD</text>
+  
+  <!-- Outer Frame -->
+  <rect x="25" y="75" width="250" height="250" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" rx="12"/>
+  
+  <!-- Corner Position Squares -->
+  <!-- Top Left -->
+  <rect x="45" y="95" width="55" height="55" fill="#1c1917" rx="8"/>
+  <rect x="55" y="105" width="35" height="35" fill="#ffffff" rx="4"/>
+  <rect x="63" y="113" width="19" height="19" fill="#f59e0b" rx="2"/>
+
+  <!-- Top Right -->
+  <rect x="200" y="95" width="55" height="55" fill="#1c1917" rx="8"/>
+  <rect x="210" y="105" width="35" height="35" fill="#ffffff" rx="4"/>
+  <rect x="218" y="113" width="19" height="19" fill="#f59e0b" rx="2"/>
+
+  <!-- Bottom Left -->
+  <rect x="45" y="250" width="55" height="55" fill="#1c1917" rx="8"/>
+  <rect x="55" y="260" width="35" height="35" fill="#ffffff" rx="4"/>
+  <rect x="63" y="268" width="19" height="19" fill="#f59e0b" rx="2"/>
+
+  <!-- Simulated QR Pattern Matrix -->
+  <g fill="#1c1917">
+    <rect x="115" y="95" width="10" height="20"/>
+    <rect x="135" y="95" width="20" height="10"/>
+    <rect x="165" y="100" width="10" height="15"/>
+    <rect x="115" y="125" width="15" height="10"/>
+    <rect x="145" y="120" width="25" height="12"/>
+    <rect x="175" y="125" width="10" height="25"/>
+    
+    <rect x="45" y="165" width="15" height="15"/>
+    <rect x="70" y="165" width="20" height="10"/>
+    <rect x="100" y="160" width="12" height="25"/>
+    <rect x="125" y="150" width="20" height="20"/>
+    <rect x="155" y="155" width="25" height="12"/>
+    <rect x="190" y="165" width="15" height="15"/>
+    <rect x="215" y="160" width="20" height="10"/>
+    <rect x="245" y="165" width="10" height="20"/>
+    
+    <rect x="45" y="195" width="25" height="10"/>
+    <rect x="80" y="190" width="10" height="20"/>
+    <rect x="105" y="195" width="20" height="12"/>
+    <rect x="135" y="185" width="15" height="25"/>
+    <rect x="160" y="195" width="20" height="10"/>
+    <rect x="195" y="190" width="12" height="20"/>
+    <rect x="220" y="195" width="15" height="15"/>
+    <rect x="245" y="195" width="10" height="12"/>
+
+    <rect x="45" y="220" width="12" height="18"/>
+    <rect x="70" y="225" width="20" height="10"/>
+    <rect x="110" y="220" width="20" height="15"/>
+    <rect x="140" y="225" width="15" height="10"/>
+    <rect x="170" y="220" width="25" height="15"/>
+    <rect x="205" y="225" width="20" height="12"/>
+    <rect x="235" y="220" width="20" height="15"/>
+
+    <rect x="115" y="250" width="15" height="25"/>
+    <rect x="140" y="260" width="20" height="12"/>
+    <rect x="170" y="250" width="15" height="15"/>
+    <rect x="195" y="260" width="20" height="10"/>
+    <rect x="225" y="250" width="15" height="25"/>
+
+    <rect x="115" y="285" width="20" height="15"/>
+    <rect x="145" y="280" width="15" height="20"/>
+    <rect x="175" y="290" width="20" height="12"/>
+    <rect x="205" y="285" width="25" height="15"/>
+    <rect x="240" y="285" width="15" height="20"/>
+  </g>
+
+  <!-- Center Logo Badge -->
+  <rect x="120" y="170" width="60" height="60" fill="#ffffff" rx="10" stroke="#f59e0b" stroke-width="2"/>
+  <text x="150" y="206" fill="#f59e0b" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="26" text-anchor="middle">OZ</text>
+
+  <!-- Bottom Brand info -->
+  <text x="150" y="345" fill="#6b7280" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="600" font-size="11" text-anchor="middle">NMID: ID10200392019 • GPN / QRIS</text>
+</svg>
