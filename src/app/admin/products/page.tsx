@@ -185,7 +185,7 @@ export default function AdminProductsPage() {
             resetForm();
             setShowAddModal(true);
           }}
-          className="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all active:scale-95 shrink-0"
+          className="px-5 py-3 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-orange-700/25 transition-all active:scale-95 shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Tambah Menu Baru</span>
@@ -195,7 +195,7 @@ export default function AdminProductsPage() {
       {/* Products Grid */}
       {loading ? (
         <div className="py-20 flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-3 border-amber-500/30 border-t-amber-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-3 border-orange-700/30 border-t-orange-700 rounded-full animate-spin" />
           <p className="text-sm font-semibold text-[var(--text-muted)]">Memuat daftar produk...</p>
         </div>
       ) : products.length === 0 ? (
@@ -242,7 +242,7 @@ export default function AdminProductsPage() {
 
                 {/* Info */}
                 <div className="flex gap-4 items-start mb-4">
-                  <div className="w-16 h-16 rounded-xl bg-amber-500/10 border border-[var(--border-color)] flex items-center justify-center text-2xl shrink-0 overflow-hidden">
+                  <div className="w-16 h-16 rounded-xl bg-orange-700/10 border border-[var(--border-color)] flex items-center justify-center text-2xl shrink-0 overflow-hidden">
                     {p.imageUrl ? (
                       <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
                     ) : (
@@ -253,7 +253,7 @@ export default function AdminProductsPage() {
                     <h3 className="font-extrabold text-base text-[var(--text-main)] font-[family-name:var(--font-heading)]">
                       {p.name}
                     </h3>
-                    <div className="text-sm font-extrabold text-amber-500 font-[family-name:var(--font-heading)]">
+                    <div className="text-sm font-extrabold text-orange-700 dark:text-orange-400 font-[family-name:var(--font-heading)]">
                       {formatRupiah(p.price)}
                     </div>
                     <p className="text-xs text-[var(--text-muted)] mt-1 line-clamp-2">
@@ -268,9 +268,9 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={() => openEditModal(p)}
-                  className="flex-1 py-2 rounded-xl border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-amber-500 transition-colors"
+                  className="flex-1 py-2 rounded-xl border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-orange-600 transition-colors"
                 >
-                  <Edit2 className="w-3.5 h-3.5 text-amber-500" />
+                  <Edit2 className="w-3.5 h-3.5 text-orange-700 dark:text-orange-400" />
                   <span>Edit Details</span>
                 </button>
                 <button
@@ -306,7 +306,7 @@ export default function AdminProductsPage() {
             <form onSubmit={handleSaveProduct} className="flex flex-col gap-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1">
-                  Nama Menu <span className="text-amber-500">*</span>
+                  Nama Menu <span className="text-orange-700 dark:text-orange-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -314,14 +314,14 @@ export default function AdminProductsPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Contoh: Pentol Kriwil Pedas"
-                  className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-sm font-medium outline-none focus:border-amber-500"
+                  className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-sm font-medium outline-none focus:border-orange-600"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1">
-                    Harga (Rp) <span className="text-amber-500">*</span>
+                    Harga (Rp) <span className="text-orange-700 dark:text-orange-400">*</span>
                   </label>
                   <input
                     type="number"
@@ -330,7 +330,7 @@ export default function AdminProductsPage() {
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder="15000"
-                    className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-sm font-medium outline-none focus:border-amber-500"
+                    className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-sm font-medium outline-none focus:border-orange-600"
                   />
                 </div>
 
@@ -343,7 +343,7 @@ export default function AdminProductsPage() {
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     placeholder="Pentol / Siomay"
-                    className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-sm font-medium outline-none focus:border-amber-500"
+                    className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-sm font-medium outline-none focus:border-orange-600"
                   />
                 </div>
               </div>
@@ -357,7 +357,7 @@ export default function AdminProductsPage() {
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
                   placeholder="Deskripsi singkat hidangan..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-amber-500 resize-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-orange-600 resize-none"
                 />
               </div>
 
@@ -370,7 +370,7 @@ export default function AdminProductsPage() {
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-amber-500"
+                  className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-orange-600"
                 />
               </div>
 
@@ -385,7 +385,7 @@ export default function AdminProductsPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-md shadow-amber-500/25 transition-all"
+                  className="flex-1 py-3 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold shadow-md shadow-orange-700/25 transition-all"
                 >
                   {isSubmitting ? 'Menyimpan...' : editingProduct ? 'Update Menu' : 'Simpan Menu'}
                 </button>

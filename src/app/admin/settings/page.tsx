@@ -119,7 +119,7 @@ export default function AdminSettingsPage() {
         <div className="glass-card p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <Building2 className="w-5 h-5 text-amber-500" />
+              <Building2 className="w-5 h-5 text-orange-700 dark:text-orange-400" />
               <h2 className="text-lg font-bold font-[family-name:var(--font-heading)]">
                 Daftar Divisi ({divisions.length})
               </h2>
@@ -131,11 +131,11 @@ export default function AdminSettingsPage() {
                 value={newDivision}
                 onChange={(e) => setNewDivision(e.target.value)}
                 placeholder="Tambah divisi baru..."
-                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-amber-500"
+                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-orange-600"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold flex items-center gap-1 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold flex items-center gap-1 transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah</span>

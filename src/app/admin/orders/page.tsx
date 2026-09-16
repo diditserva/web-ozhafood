@@ -214,15 +214,15 @@ function OrdersContent() {
           <button
             type="button"
             onClick={fetchOrders}
-            className="p-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold hover:border-amber-500 transition-all"
+            className="p-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold hover:border-orange-600 transition-all"
             title="Refresh Data"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-amber-500' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-orange-700 dark:text-orange-400' : ''}`} />
           </button>
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold flex items-center gap-1.5 hover:border-amber-500 transition-all"
+            className="px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold flex items-center gap-1.5 hover:border-orange-600 transition-all"
           >
             <Printer className="w-4 h-4 text-purple-500" />
             <span>Cetak Rekap Dapur</span>
@@ -239,10 +239,10 @@ function OrdersContent() {
       </div>
 
       {/* KITCHEN PORTION SUMMARY CARD */}
-      <div className="glass-card p-6 border-l-4 border-l-amber-500">
+      <div className="glass-card p-6 border-l-4 border-l-orange-700">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-lg bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center font-bold">
               <Utensils className="w-4 h-4" />
             </div>
             <div>
@@ -258,7 +258,7 @@ function OrdersContent() {
           </div>
           <div className="text-right">
             <span className="text-xs text-[var(--text-muted)] block">Total Omzet Filter</span>
-            <span className="text-base sm:text-lg font-black text-amber-500 font-[family-name:var(--font-heading)]">
+            <span className="text-base sm:text-lg font-black text-orange-700 dark:text-orange-400 font-[family-name:var(--font-heading)]">
               {formatRupiah(totalOmzetFiltered)}
             </span>
           </div>
@@ -278,7 +278,7 @@ function OrdersContent() {
                 <span className="text-xs sm:text-sm font-bold text-[var(--text-main)] truncate mr-2">
                   {kp.name}
                 </span>
-                <span className="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-extrabold text-xs sm:text-sm font-[family-name:var(--font-heading)] shrink-0 shadow-sm">
+                <span className="px-2.5 py-1 rounded-lg bg-orange-700 dark:bg-orange-600 text-white font-extrabold text-xs sm:text-sm font-[family-name:var(--font-heading)] shrink-0 shadow-sm">
                   {kp.qty} porsi
                 </span>
               </div>
@@ -297,7 +297,7 @@ function OrdersContent() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && fetchOrders()}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs outline-none focus:border-amber-500"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs outline-none focus:border-orange-600"
           />
           <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
         </div>
@@ -308,9 +308,9 @@ function OrdersContent() {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-semibold outline-none focus:border-amber-500 cursor-pointer"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-semibold outline-none focus:border-orange-600 cursor-pointer"
           />
-          <Calendar className="w-4 h-4 text-amber-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Calendar className="w-4 h-4 text-orange-700 dark:text-orange-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
         {/* Status Filter */}
@@ -318,7 +318,7 @@ function OrdersContent() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-medium outline-none focus:border-amber-500 cursor-pointer appearance-none"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-medium outline-none focus:border-orange-600 cursor-pointer appearance-none"
           >
             <option value="">Semua Status</option>
             <option value="PENDING">Menunggu Bayar</option>
@@ -339,7 +339,7 @@ function OrdersContent() {
               setSelectedStatus('');
               setSearchQuery('');
             }}
-            className="text-xs font-bold text-amber-500 hover:underline px-2 py-1"
+            className="text-xs font-bold text-orange-700 dark:text-orange-400 hover:underline px-2 py-1"
           >
             Reset Filter
           </button>
@@ -379,7 +379,7 @@ function OrdersContent() {
                   <tr key={o.id} className="hover:bg-[var(--bg-primary)]/40 transition-colors">
                     {/* Order Code */}
                     <td className="p-4 align-top">
-                      <span className="font-mono font-bold text-amber-500 block">
+                      <span className="font-mono font-bold text-orange-700 dark:text-orange-400 block">
                         #{o.orderCode}
                       </span>
                       <span className="text-[11px] text-[var(--text-muted)]">
@@ -405,7 +405,7 @@ function OrdersContent() {
 
                     {/* Target Date */}
                     <td className="p-4 align-top">
-                      <div className="font-semibold text-amber-500 text-xs">
+                      <div className="font-semibold text-orange-700 dark:text-orange-400 text-xs">
                         {formatDateIndo(o.targetDate)}
                       </div>
                     </td>
@@ -415,7 +415,7 @@ function OrdersContent() {
                       <div className="flex flex-col gap-1">
                         {o.items.map((it) => (
                           <div key={it.id} className="flex items-center gap-1.5 text-xs">
-                            <span className="font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500">
+                            <span className="font-bold px-1.5 py-0.5 rounded bg-orange-700/10 text-orange-700 dark:text-orange-400">
                               {it.quantity}x
                             </span>
                             <span className="text-[var(--text-main)] font-medium">
@@ -454,7 +454,7 @@ function OrdersContent() {
                         <select
                           value={o.status}
                           onChange={(e) => handleStatusChange(o.id, e.target.value)}
-                          className="mt-1 text-xs py-1 px-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-main)] outline-none focus:border-amber-500 cursor-pointer print:hidden"
+                          className="mt-1 text-xs py-1 px-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-main)] outline-none focus:border-orange-600 cursor-pointer print:hidden"
                         >
                           <option value="PENDING">Ubah: Menunggu</option>
                           <option value="CONFIRMED">Ubah: Konfirmasi</option>
@@ -480,7 +480,7 @@ export default function AdminOrdersPage() {
     <Suspense
       fallback={
         <div className="py-20 flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-3 border-amber-500/30 border-t-amber-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-3 border-orange-700/30 border-t-orange-700 rounded-full animate-spin" />
           <p className="text-sm font-semibold text-[var(--text-muted)]">Memuat pesanan...</p>
         </div>
       }

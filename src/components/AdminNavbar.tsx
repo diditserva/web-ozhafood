@@ -21,12 +21,12 @@ export default function AdminNavbar() {
         {/* Brand */}
         <div className="flex items-center gap-3">
           <Link href="/admin" className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20 text-white font-bold">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-700 to-amber-800 flex items-center justify-center shadow-lg shadow-orange-700/20 text-white font-bold">
               OZ
             </div>
             <div>
               <div className="font-extrabold tracking-tight text-lg text-[var(--text-main)] font-[family-name:var(--font-heading)]">
-                OZHA FOOD <span className="text-xs px-2 py-0.5 ml-1 rounded-full bg-amber-500/20 text-amber-500 font-semibold">ADMIN</span>
+                OZHA FOOD <span className="text-xs px-2 py-0.5 ml-1 rounded-full bg-orange-700/20 text-orange-700 dark:text-orange-400 font-semibold">ADMIN</span>
               </div>
               <p className="text-xs text-[var(--text-muted)]">Portal Manajemen & Dapur</p>
             </div>
@@ -44,7 +44,7 @@ export default function AdminNavbar() {
                 href={item.href}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
+                    ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-md shadow-orange-700/25'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--accent-light)]'
                 }`}
               >
@@ -60,7 +60,7 @@ export default function AdminNavbar() {
           <Link
             href="/"
             target="_blank"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] hover:text-amber-500 hover:border-amber-500 transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] hover:text-orange-700 dark:hover:text-orange-400 hover:border-orange-600 transition-colors"
           >
             <span>Halaman Order</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -80,7 +80,7 @@ export default function AdminNavbar() {
               href={item.href}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
                 isActive
-                  ? 'bg-amber-500 text-white'
+                  ? 'bg-orange-700 dark:bg-orange-600 text-white'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
               }`}
             >

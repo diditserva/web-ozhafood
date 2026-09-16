@@ -319,7 +319,7 @@ export default function CustomerOrderPage() {
           }`}
         >
           {toastMessage.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
           ) : (
             <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
           )}
@@ -327,23 +327,23 @@ export default function CustomerOrderPage() {
         </div>
       )}
 
-      <div className="fixed top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/4 w-96 h-96 bg-orange-700/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-amber-800/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-8">
         {/* Floating Navbar */}
         <header className="sticky top-4 z-30 mb-8 px-4 sm:px-6 py-3.5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-xl shadow-lg flex items-center justify-between transition-all">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-md shadow-amber-500/25 text-white">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-orange-700 to-amber-800 flex items-center justify-center shadow-md shadow-orange-700/25 text-white">
               <Utensils className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-amber-500 via-amber-400 to-orange-500 bg-clip-text text-transparent font-[family-name:var(--font-heading)]">
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 bg-clip-text text-transparent font-[family-name:var(--font-heading)]">
                   OZHA FOOD
                 </h1>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600/10 text-emerald-600 border border-emerald-600/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping inline-block" />
                   PO Buka
                 </span>
               </div>
@@ -356,9 +356,9 @@ export default function CustomerOrderPage() {
           <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="/admin"
-              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/80 text-xs font-bold text-[var(--text-muted)] hover:text-amber-500 hover:border-amber-500/40 transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/80 text-xs font-bold text-[var(--text-muted)] hover:text-orange-700 dark:hover:text-orange-400 hover:border-orange-600/40 transition-all shadow-sm"
             >
-              <ChefHat className="w-3.5 h-3.5 text-amber-500" />
+              <ChefHat className="w-3.5 h-3.5 text-orange-700 dark:text-orange-400" />
               <span className="hidden sm:inline">Panel Dapur</span>
               <span className="sm:hidden">Dapur</span>
             </a>
@@ -367,15 +367,15 @@ export default function CustomerOrderPage() {
         </header>
 
         {/* Hero Banner Section */}
-        <section className="relative overflow-hidden rounded-3xl border border-[var(--border-color)] bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent p-6 sm:p-10 mb-10 shadow-xl backdrop-blur-md">
-          <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+        <section className="relative overflow-hidden rounded-3xl border border-[var(--border-color)] bg-gradient-to-br from-orange-700/10 via-orange-600/5 to-transparent p-6 sm:p-10 mb-10 shadow-xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-orange-700/15 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-500 text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-700/15 border border-orange-700/30 text-orange-700 dark:text-orange-400 text-xs font-bold mb-4">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Dibuat Segar Sesuai Pesanan Anda</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-main)] font-[family-name:var(--font-heading)] leading-tight mb-3">
-              Cita Rasa Otentik, <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">Dibuat Spesial</span> untuk Harimu.
+              Cita Rasa Otentik, <span className="bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 bg-clip-text text-transparent">Dibuat Spesial</span> untuk Harimu.
             </h2>
             <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed mb-6">
               Pilih menu homemade favoritmu, tentukan tanggal antar yang kamu inginkan, dan biarkan dapur kami memasak hidangan hangat dan higienis untukmu.
@@ -383,15 +383,15 @@ export default function CustomerOrderPage() {
 
             <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[var(--text-main)]">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <span>100% Halal & Higienis</span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
-                <Truck className="w-4 h-4 text-amber-500" />
+                <Truck className="w-4 h-4 text-orange-700 dark:text-orange-400" />
                 <span>Antar ke Divisi Kantor Gratis</span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
-                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
                 <span>Resep Khas Homemade</span>
               </div>
             </div>
@@ -401,7 +401,7 @@ export default function CustomerOrderPage() {
         {/* 3 Step Process Bar */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
           <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xs">
+            <div className="w-8 h-8 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 font-black text-xs flex items-center justify-center">
               1
             </div>
             <div>
@@ -410,7 +410,7 @@ export default function CustomerOrderPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xs">
+            <div className="w-8 h-8 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 font-black text-xs flex items-center justify-center">
               2
             </div>
             <div>
@@ -419,7 +419,7 @@ export default function CustomerOrderPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black text-xs">
+            <div className="w-8 h-8 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 font-black text-xs flex items-center justify-center">
               3
             </div>
             <div>
@@ -434,7 +434,7 @@ export default function CustomerOrderPage() {
             {/* Step 1: Customer Form */}
             <section className="glass-card p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center">
                   <User className="w-5 h-5" />
                 </div>
                 <div>
@@ -450,7 +450,7 @@ export default function CustomerOrderPage() {
               <div className="flex flex-col gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                    Nama Lengkap <span className="text-amber-500">*</span>
+                    Nama Lengkap <span className="text-orange-700 dark:text-orange-400">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -458,7 +458,7 @@ export default function CustomerOrderPage() {
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Masukkan nama lengkap Anda"
-                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-sm font-medium transition-all"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-medium transition-all"
                     />
                     <User className="w-4 h-4 text-[var(--text-muted)] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
@@ -467,13 +467,13 @@ export default function CustomerOrderPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                      Divisi <span className="text-amber-500">*</span>
+                      Divisi <span className="text-orange-700 dark:text-orange-400">*</span>
                     </label>
                     <div className="relative">
                       <select
                         value={selectedDivision}
                         onChange={(e) => setSelectedDivision(e.target.value)}
-                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
+                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
                       >
                         <option value="">Pilih Divisi Anda</option>
                         {divisions.map((d) => (
@@ -488,13 +488,13 @@ export default function CustomerOrderPage() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                      Lokasi Antar <span className="text-amber-500">*</span>
+                      Lokasi Antar <span className="text-orange-700 dark:text-orange-400">*</span>
                     </label>
                     <div className="relative">
                       <select
                         value={selectedLocation}
                         onChange={(e) => setSelectedLocation(e.target.value)}
-                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
+                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
                       >
                         <option value="">Pilih Lokasi Antar</option>
                         {locations.map((l) => (
@@ -510,7 +510,7 @@ export default function CustomerOrderPage() {
 
                 <div className="pt-3 border-t border-[var(--border-color)] mt-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                    Pesanan untuk Kapan? <span className="text-amber-500">*</span>
+                    Pesanan untuk Kapan? <span className="text-orange-700 dark:text-orange-400">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -518,9 +518,9 @@ export default function CustomerOrderPage() {
                       value={targetDate}
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => setTargetDate(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-sm font-semibold transition-all cursor-pointer"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-semibold transition-all cursor-pointer"
                     />
-                    <Calendar className="w-4 h-4 text-amber-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Calendar className="w-4 h-4 text-orange-700 dark:text-orange-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 mt-2.5">
@@ -530,8 +530,8 @@ export default function CustomerOrderPage() {
                       onClick={() => setTargetDate(getNextFriday(0))}
                       className={`text-xs px-3 py-1 rounded-lg border font-semibold transition-all ${
                         targetDate === getNextFriday(0)
-                          ? 'bg-amber-500 text-white border-amber-500 shadow-sm shadow-amber-500/20'
-                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-amber-500/50'
+                          ? 'bg-orange-700 dark:bg-orange-600 text-white border-orange-700 shadow-sm shadow-orange-700/20'
+                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-orange-600/50'
                       }`}
                     >
                       Jumat Minggu Ini
@@ -541,8 +541,8 @@ export default function CustomerOrderPage() {
                       onClick={() => setTargetDate(getNextFriday(1))}
                       className={`text-xs px-3 py-1 rounded-lg border font-semibold transition-all ${
                         targetDate === getNextFriday(1)
-                          ? 'bg-amber-500 text-white border-amber-500 shadow-sm shadow-amber-500/20'
-                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-amber-500/50'
+                          ? 'bg-orange-700 dark:bg-orange-600 text-white border-orange-700 shadow-sm shadow-orange-700/20'
+                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-orange-600/50'
                       }`}
                     >
                       Jumat Minggu Depan
@@ -556,7 +556,7 @@ export default function CustomerOrderPage() {
             <section className="glass-card p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center">
                     <Utensils className="w-5 h-5" />
                   </div>
                   <div>
@@ -576,7 +576,7 @@ export default function CustomerOrderPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Cari hidangan..."
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 focus:border-amber-500 outline-none transition-all"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 focus:border-orange-600 outline-none transition-all"
                   />
                   <Search className="w-3.5 h-3.5 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
@@ -592,8 +592,8 @@ export default function CustomerOrderPage() {
                       onClick={() => setSelectedCategory(cat)}
                       className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                         selectedCategory === cat
-                          ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
-                          : 'bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] text-[var(--text-muted)] hover:border-amber-500/40 hover:text-[var(--text-main)]'
+                          ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-md shadow-orange-700/20'
+                          : 'bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] text-[var(--text-muted)] hover:border-orange-600/40 hover:text-[var(--text-main)]'
                       }`}
                     >
                       {cat}
@@ -633,12 +633,12 @@ export default function CustomerOrderPage() {
                           !isAvailable
                             ? 'border-[var(--border-color)]/50 bg-[var(--bg-secondary)]/30 opacity-60'
                             : qty > 0
-                            ? 'border-amber-500 bg-[var(--bg-secondary)] shadow-xl shadow-amber-500/10 ring-2 ring-amber-500/20'
-                            : 'border-[var(--border-color)] bg-[var(--bg-secondary)]/80 hover:border-amber-500/60 hover:shadow-lg'
+                            ? 'border-orange-600 dark:border-orange-500 bg-[var(--bg-secondary)] shadow-xl shadow-orange-700/10 ring-2 ring-orange-600/20'
+                            : 'border-[var(--border-color)] bg-[var(--bg-secondary)]/80 hover:border-orange-600/60 hover:shadow-lg'
                         }`}
                       >
                         <div>
-                          <div className="relative h-32 sm:h-36 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-[var(--border-color)] flex items-center justify-center overflow-hidden mb-3.5">
+                          <div className="relative h-32 sm:h-36 rounded-2xl bg-gradient-to-br from-orange-700/10 via-orange-600/5 to-transparent border border-[var(--border-color)] flex items-center justify-center overflow-hidden mb-3.5">
                             {p.imageUrl ? (
                               <img
                                 src={p.imageUrl}
@@ -652,8 +652,8 @@ export default function CustomerOrderPage() {
                             )}
 
                             {/* Badge */}
-                            <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-primary)]/90 backdrop-blur-md border border-[var(--border-color)] text-[10px] font-extrabold text-amber-500 flex items-center gap-1 shadow-sm">
-                              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                            <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-primary)]/90 backdrop-blur-md border border-[var(--border-color)] text-[10px] font-extrabold text-orange-700 dark:text-orange-400 flex items-center gap-1 shadow-sm">
+                              <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                               <span>Favorit</span>
                             </div>
 
@@ -665,7 +665,7 @@ export default function CustomerOrderPage() {
                           </div>
 
                           <div className="flex items-start justify-between gap-2 mb-1">
-                            <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-[var(--text-main)] group-hover:text-amber-500 transition-colors">
+                            <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-[var(--text-main)] group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors">
                               {p.name}
                             </h3>
                           </div>
@@ -675,7 +675,7 @@ export default function CustomerOrderPage() {
                         </div>
 
                         <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] border-dashed">
-                          <span className="font-black text-amber-500 text-base font-[family-name:var(--font-heading)]">
+                          <span className="font-black text-orange-700 dark:text-orange-400 text-base font-[family-name:var(--font-heading)]">
                             {formatRupiah(p.price)}
                           </span>
 
@@ -684,14 +684,14 @@ export default function CustomerOrderPage() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateQty(p.id, -1)}
-                                className="w-7 h-7 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:hover:bg-[var(--bg-secondary)] disabled:hover:text-[var(--text-main)]"
+                                className="w-7 h-7 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-orange-700 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:hover:bg-[var(--bg-secondary)] disabled:hover:text-[var(--text-main)]"
                                 disabled={qty === 0}
                               >
                                 <Minus className="w-3 h-3" />
                               </button>
                               <span
                                 className={`font-black text-sm min-w-5 text-center transition-all ${
-                                  qty > 0 ? 'text-amber-500 scale-110' : 'text-[var(--text-muted)]'
+                                  qty > 0 ? 'text-orange-700 dark:text-orange-400 scale-110' : 'text-[var(--text-muted)]'
                                 }`}
                               >
                                 {qty}
@@ -699,7 +699,7 @@ export default function CustomerOrderPage() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateQty(p.id, 1)}
-                                className="w-7 h-7 rounded-xl bg-amber-500 text-white flex items-center justify-center hover:bg-amber-600 transition-all shadow-sm shadow-amber-500/30 active:scale-95"
+                                className="w-7 h-7 rounded-xl bg-orange-700 dark:bg-orange-600 text-white flex items-center justify-center hover:bg-orange-800 dark:hover:bg-orange-700 transition-all shadow-sm shadow-orange-700/30 active:scale-95"
                               >
                                 <Plus className="w-3 h-3" />
                               </button>
@@ -751,7 +751,7 @@ export default function CustomerOrderPage() {
                     >
                       <div>
                         <span className="font-semibold text-[var(--text-main)]">{item.productName}</span>
-                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-extrabold">
+                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-orange-700/10 text-orange-700 dark:text-orange-400 font-extrabold">
                           {item.quantity}x
                         </span>
                       </div>
@@ -773,7 +773,7 @@ export default function CustomerOrderPage() {
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
                     placeholder="Contoh: Pentol bumbu kacang banyak, siomay sambal dipisah, dll."
-                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-xs font-medium transition-all resize-none"
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-xs font-medium transition-all resize-none"
                   />
                   <FileText className="w-4 h-4 text-[var(--text-muted)] absolute left-4 top-3.5 pointer-events-none" />
                 </div>
@@ -786,16 +786,16 @@ export default function CustomerOrderPage() {
                 </div>
                 <div className="flex justify-between text-xs text-[var(--text-muted)] font-medium">
                   <span>Ongkos Kirim Kantor</span>
-                  <span className="font-black text-emerald-500">GRATIS</span>
+                  <span className="font-black text-emerald-600 dark:text-emerald-400">GRATIS</span>
                 </div>
                 <div className="pt-3 border-t border-[var(--border-color)] flex justify-between items-center">
                   <div>
                     <span className="text-xs text-[var(--text-muted)] block">Total Pembayaran</span>
-                    <span className="text-xl font-black text-amber-500 font-[family-name:var(--font-heading)]">
+                    <span className="text-xl font-black text-orange-700 dark:text-orange-400 font-[family-name:var(--font-heading)]">
                       {formatRupiah(totalAmount)}
                     </span>
                   </div>
-                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-orange-700/10 text-orange-700 dark:text-orange-400 border border-orange-700/20">
                     PO Terverifikasi
                   </span>
                 </div>
@@ -805,7 +805,7 @@ export default function CustomerOrderPage() {
                 type="button"
                 onClick={handlePreSubmit}
                 disabled={!isFormValid}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:from-stone-600 disabled:to-stone-700 disabled:cursor-not-allowed text-white font-extrabold font-[family-name:var(--font-heading)] text-base shadow-xl shadow-amber-500/25 disabled:shadow-none flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-700 via-orange-600 to-amber-700 hover:from-orange-800 hover:to-amber-800 disabled:from-stone-600 disabled:to-stone-700 disabled:cursor-not-allowed text-white font-extrabold font-[family-name:var(--font-heading)] text-base shadow-xl shadow-orange-700/25 disabled:shadow-none flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
               >
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -828,7 +828,7 @@ export default function CustomerOrderPage() {
             onClick={() => {
               document.getElementById('cart-summary-section')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="w-full p-4 rounded-2xl bg-amber-500 text-white font-bold flex items-center justify-between shadow-xl shadow-amber-500/40 active:scale-95 transition-all"
+            className="w-full p-4 rounded-2xl bg-orange-700 text-white font-bold flex items-center justify-between shadow-xl shadow-orange-700/40 active:scale-95 transition-all"
           >
             <div className="flex flex-col text-left">
               <span className="text-xs uppercase tracking-wider font-extrabold opacity-90">
@@ -849,7 +849,7 @@ export default function CustomerOrderPage() {
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="glass-card max-w-sm w-full p-6 text-center flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center">
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
@@ -871,7 +871,7 @@ export default function CustomerOrderPage() {
               <button
                 type="button"
                 onClick={executeSubmit}
-                className="py-2.5 rounded-xl bg-amber-500 text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-md shadow-amber-500/20"
+                className="py-2.5 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold transition-all shadow-md shadow-orange-700/20"
               >
                 Ya, Lanjutkan
               </button>
@@ -897,7 +897,7 @@ export default function CustomerOrderPage() {
             <div className="w-full p-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-xs mb-6 flex flex-col gap-2">
               <div className="flex justify-between pb-2 border-b border-[var(--border-color)] font-bold text-sm">
                 <span>No. Order</span>
-                <span className="text-amber-500 font-mono">#{lastSubmittedOrder.orderCode}</span>
+                <span className="text-orange-700 dark:text-orange-400 font-mono">#{lastSubmittedOrder.orderCode}</span>
               </div>
               <div className="flex justify-between text-[var(--text-muted)]">
                 <span>Nama Pemesan:</span>
@@ -911,13 +911,13 @@ export default function CustomerOrderPage() {
               </div>
               <div className="flex justify-between text-[var(--text-muted)]">
                 <span>Tanggal Kebutuhan:</span>
-                <span className="font-semibold text-amber-500">
+                <span className="font-semibold text-orange-700 dark:text-orange-400">
                   {formatDateIndo(lastSubmittedOrder.targetDate)}
                 </span>
               </div>
               <div className="pt-2 border-t border-[var(--border-color)] border-dashed flex justify-between font-bold text-sm">
                 <span>Total Tagihan:</span>
-                <span className="text-amber-500 text-base font-[family-name:var(--font-heading)] font-extrabold">
+                <span className="text-orange-700 dark:text-orange-400 text-base font-[family-name:var(--font-heading)] font-extrabold">
                   {formatRupiah(lastSubmittedOrder.totalAmount)}
                 </span>
               </div>
@@ -925,7 +925,7 @@ export default function CustomerOrderPage() {
 
             <div className="w-full mb-6">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3">
-                <CreditCard className="w-4 h-4 text-amber-500" />
+                <CreditCard className="w-4 h-4 text-orange-700 dark:text-orange-400" />
                 <span>Pilih Metode Pembayaran:</span>
               </div>
 
@@ -935,7 +935,7 @@ export default function CustomerOrderPage() {
                   onClick={() => setPaymentTab('qris')}
                   className={`py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                     paymentTab === 'qris'
-                      ? 'bg-amber-500 text-white shadow-sm'
+                      ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                   }`}
                 >
@@ -947,7 +947,7 @@ export default function CustomerOrderPage() {
                   onClick={() => setPaymentTab('bank')}
                   className={`py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                     paymentTab === 'bank'
-                      ? 'bg-amber-500 text-white shadow-sm'
+                      ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                   }`}
                 >
@@ -974,7 +974,7 @@ export default function CustomerOrderPage() {
                     <button
                       type="button"
                       onClick={() => setShowQrZoom(true)}
-                      className="flex-1 py-2 px-3 rounded-lg border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-amber-500 transition-colors"
+                      className="flex-1 py-2 px-3 rounded-lg border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-orange-600 transition-colors"
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
                       <span>Perbesar</span>
@@ -982,7 +982,7 @@ export default function CustomerOrderPage() {
                     <a
                       href={QRIS_IMAGE_DATA}
                       download="QRIS_OzhaFood.svg"
-                      className="flex-1 py-2 px-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-amber-500 transition-colors"
+                      className="flex-1 py-2 px-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-orange-600 transition-colors"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Unduh QR</span>
@@ -999,7 +999,7 @@ export default function CustomerOrderPage() {
                       className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between"
                     >
                       <div>
-                        <div className="text-[11px] font-black text-amber-500 uppercase tracking-wider">
+                        <div className="text-[11px] font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">
                           {b.bank}
                         </div>
                         <div className="text-base font-mono font-bold tracking-wider text-[var(--text-main)]">
@@ -1012,8 +1012,8 @@ export default function CustomerOrderPage() {
                         onClick={() => handleCopyAccount(b.number)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
                           copiedBank === b.number
-                            ? 'bg-emerald-500 text-white'
-                            : 'bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white'
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-orange-700/10 text-orange-700 dark:text-orange-400 hover:bg-orange-700 hover:text-white'
                         }`}
                       >
                         <Copy className="w-3 h-3" />
@@ -1058,7 +1058,7 @@ export default function CustomerOrderPage() {
             <button
               type="button"
               onClick={() => setShowQrZoom(false)}
-              className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold shadow-lg"
+              className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-700 text-white flex items-center justify-center font-bold shadow-lg"
             >
               <X className="w-4 h-4" />
             </button>
