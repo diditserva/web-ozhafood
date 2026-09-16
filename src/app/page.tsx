@@ -28,6 +28,11 @@ import {
   ChevronRight,
   ShieldCheck,
   Search,
+  ChefHat,
+  Star,
+  Check,
+  Truck,
+  HeartHandshake,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import {
@@ -325,36 +330,108 @@ export default function CustomerOrderPage() {
       <div className="fixed top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
-        <header className="flex items-center justify-between py-4 mb-8">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25 text-white">
-              <Utensils className="w-6 h-6" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-8">
+        {/* Floating Navbar */}
+        <header className="sticky top-4 z-30 mb-8 px-4 sm:px-6 py-3.5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-xl shadow-lg flex items-center justify-between transition-all">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-md shadow-amber-500/25 text-white">
+              <Utensils className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-amber-500 via-amber-400 to-orange-500 bg-clip-text text-transparent font-[family-name:var(--font-heading)]">
-                OZHA FOOD
-              </h1>
-              <p className="text-xs sm:text-sm text-[var(--text-muted)] font-medium">
-                Sistem Pemesanan Pre-Order • Lezat & Higienis
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-amber-500 via-amber-400 to-orange-500 bg-clip-text text-transparent font-[family-name:var(--font-heading)]">
+                  OZHA FOOD
+                </h1>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                  PO Buka
+                </span>
+              </div>
+              <p className="text-[11px] text-[var(--text-muted)] font-medium">
+                Pemesanan Pre-Order • Fresh & Halal
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="/admin"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold text-[var(--text-muted)] hover:text-amber-500 hover:border-amber-500 transition-all backdrop-blur-md"
+              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/80 text-xs font-bold text-[var(--text-muted)] hover:text-amber-500 hover:border-amber-500/40 transition-all shadow-sm"
             >
-              <span>Admin Dapur</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <ChefHat className="w-3.5 h-3.5 text-amber-500" />
+              <span className="hidden sm:inline">Panel Dapur</span>
+              <span className="sm:hidden">Dapur</span>
             </a>
             <ThemeToggle />
           </div>
         </header>
 
+        {/* Hero Banner Section */}
+        <section className="relative overflow-hidden rounded-3xl border border-[var(--border-color)] bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent p-6 sm:p-10 mb-10 shadow-xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-500 text-xs font-bold mb-4">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Dibuat Segar Sesuai Pesanan Anda</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-main)] font-[family-name:var(--font-heading)] leading-tight mb-3">
+              Cita Rasa Otentik, <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">Dibuat Spesial</span> untuk Harimu.
+            </h2>
+            <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed mb-6">
+              Pilih menu homemade favoritmu, tentukan tanggal antar yang kamu inginkan, dan biarkan dapur kami memasak hidangan hangat dan higienis untukmu.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[var(--text-main)]">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <span>100% Halal & Higienis</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
+                <Truck className="w-4 h-4 text-amber-500" />
+                <span>Antar ke Divisi Kantor Gratis</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
+                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                <span>Resep Khas Homemade</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 3 Step Process Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
+          <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xs">
+              1
+            </div>
+            <div>
+              <div className="text-xs font-bold text-[var(--text-main)]">Pilih Menu Lezat</div>
+              <div className="text-[11px] text-[var(--text-muted)]">Atur porsi hidangan kesukaanmu</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xs">
+              2
+            </div>
+            <div>
+              <div className="text-xs font-bold text-[var(--text-main)]">Tentukan Jadwal & Lokasi</div>
+              <div className="text-[11px] text-[var(--text-muted)]">Pilih hari pengantaran pesanan</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black text-xs">
+              3
+            </div>
+            <div>
+              <div className="text-xs font-bold text-[var(--text-main)]">Konfirmasi & Bayar</div>
+              <div className="text-[11px] text-[var(--text-muted)]">Scan QRIS atau transfer bank instan</div>
+            </div>
+          </div>
+        </div>
+
         <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-7 flex flex-col gap-8">
+            {/* Step 1: Customer Form */}
             <section className="glass-card p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
@@ -365,7 +442,7 @@ export default function CustomerOrderPage() {
                     Informasi Pemesan
                   </h2>
                   <p className="text-xs text-[var(--text-muted)]">
-                    Isi data diri & tanggal pesanan yang diinginkan
+                    Isi nama dan pilih jadwal pengantaran pesananmu
                   </p>
                 </div>
               </div>
@@ -431,7 +508,7 @@ export default function CustomerOrderPage() {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[var(--border-color)] mt-2">
+                <div className="pt-3 border-t border-[var(--border-color)] mt-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
                     Pesanan untuk Kapan? <span className="text-amber-500">*</span>
                   </label>
@@ -451,9 +528,9 @@ export default function CustomerOrderPage() {
                     <button
                       type="button"
                       onClick={() => setTargetDate(getNextFriday(0))}
-                      className={`text-xs px-2.5 py-1 rounded-lg border font-semibold transition-all ${
+                      className={`text-xs px-3 py-1 rounded-lg border font-semibold transition-all ${
                         targetDate === getNextFriday(0)
-                          ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
+                          ? 'bg-amber-500 text-white border-amber-500 shadow-sm shadow-amber-500/20'
                           : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-amber-500/50'
                       }`}
                     >
@@ -462,9 +539,9 @@ export default function CustomerOrderPage() {
                     <button
                       type="button"
                       onClick={() => setTargetDate(getNextFriday(1))}
-                      className={`text-xs px-2.5 py-1 rounded-lg border font-semibold transition-all ${
+                      className={`text-xs px-3 py-1 rounded-lg border font-semibold transition-all ${
                         targetDate === getNextFriday(1)
-                          ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
+                          ? 'bg-amber-500 text-white border-amber-500 shadow-sm shadow-amber-500/20'
                           : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-amber-500/50'
                       }`}
                     >
@@ -475,107 +552,146 @@ export default function CustomerOrderPage() {
               </div>
             </section>
 
+            {/* Step 2: Food Menu Section */}
             <section className="glass-card p-6 sm:p-8">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
                     <Utensils className="w-5 h-5" />
                   </div>
                   <div>
                     <h2 className="text-lg sm:text-xl font-bold font-[family-name:var(--font-heading)]">
-                      Daftar Menu Lezat
+                      Daftar Menu Pilihan
                     </h2>
                     <p className="text-xs text-[var(--text-muted)]">
                       Pilih hidangan dan atur jumlah porsinya
                     </p>
                   </div>
                 </div>
-                <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                  {products.length} Menu
-                </span>
-              </div>
 
-              <div className="flex items-center gap-3 p-3.5 mb-6 rounded-xl border border-dashed border-amber-500/40 bg-amber-500/5 text-xs text-[var(--text-main)]">
-                <Sparkles className="w-5 h-5 text-amber-500 shrink-0" />
-                <div>
-                  <span className="font-bold text-amber-500">Sistem Pre-Order (PO):</span> Pesanan
-                  dibuat segar sesuai tanggal yang Anda tentukan di formulir.
+                {/* Live Search Input */}
+                <div className="relative w-full sm:w-56">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari hidangan..."
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 focus:border-amber-500 outline-none transition-all"
+                  />
+                  <Search className="w-3.5 h-3.5 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
+
+              {/* Category Filter Chips */}
+              {categories.length > 1 && (
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                        selectedCategory === cat
+                          ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
+                          : 'bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] text-[var(--text-muted)] hover:border-amber-500/40 hover:text-[var(--text-main)]'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[1, 2, 3, 4].map((n) => (
                     <div
                       key={n}
-                      className="p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 animate-pulse flex flex-col gap-3"
+                      className="p-5 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 animate-pulse flex flex-col gap-3"
                     >
-                      <div className="h-28 rounded-xl bg-[var(--border-color)]/30" />
+                      <div className="h-32 rounded-2xl bg-[var(--border-color)]/30" />
                       <div className="h-5 w-3/4 rounded bg-[var(--border-color)]/40" />
                       <div className="h-3 w-full rounded bg-[var(--border-color)]/20" />
                     </div>
                   ))}
                 </div>
+              ) : filteredProducts.length === 0 ? (
+                <div className="py-12 text-center text-[var(--text-muted)] border border-dashed border-[var(--border-color)] rounded-2xl">
+                  <Utensils className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                  <p className="text-xs font-medium">Tidak ada menu yang sesuai dengan pencarian.</p>
+                </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {products.map((p) => {
+                  {filteredProducts.map((p) => {
                     const qty = quantities[p.id] || 0;
                     const isAvailable = p.isActive;
 
                     return (
                       <div
                         key={p.id}
-                        className={`p-4 sm:p-5 rounded-2xl border transition-all flex flex-col justify-between ${
-                          isAvailable
-                            ? 'border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-amber-500 hover:shadow-lg hover:shadow-amber-500/5'
-                            : 'border-[var(--border-color)]/50 bg-[var(--bg-secondary)]/30 opacity-60'
+                        className={`group relative p-4 sm:p-5 rounded-3xl border transition-all duration-300 flex flex-col justify-between ${
+                          !isAvailable
+                            ? 'border-[var(--border-color)]/50 bg-[var(--bg-secondary)]/30 opacity-60'
+                            : qty > 0
+                            ? 'border-amber-500 bg-[var(--bg-secondary)] shadow-xl shadow-amber-500/10 ring-2 ring-amber-500/20'
+                            : 'border-[var(--border-color)] bg-[var(--bg-secondary)]/80 hover:border-amber-500/60 hover:shadow-lg'
                         }`}
                       >
                         <div>
-                          <div className="relative h-28 sm:h-32 rounded-xl bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-[var(--border-color)] flex items-center justify-center overflow-hidden mb-3.5">
+                          <div className="relative h-32 sm:h-36 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-[var(--border-color)] flex items-center justify-center overflow-hidden mb-3.5">
                             {p.imageUrl ? (
                               <img
                                 src={p.imageUrl}
                                 alt={p.name}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               />
                             ) : (
-                              <span className="text-4xl select-none">{getFoodEmoji(p.name)}</span>
+                              <span className="text-5xl select-none group-hover:scale-110 transition-transform duration-300">
+                                {getFoodEmoji(p.name)}
+                              </span>
                             )}
 
+                            {/* Badge */}
+                            <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-primary)]/90 backdrop-blur-md border border-[var(--border-color)] text-[10px] font-extrabold text-amber-500 flex items-center gap-1 shadow-sm">
+                              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                              <span>Favorit</span>
+                            </div>
+
                             {!isAvailable && (
-                              <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-md bg-red-500 text-white text-[11px] font-extrabold shadow-sm">
+                              <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-red-500 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
                                 Habis
                               </div>
                             )}
                           </div>
 
-                          <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-[var(--text-main)] mb-1">
-                            {p.name}
-                          </h3>
+                          <div className="flex items-start justify-between gap-2 mb-1">
+                            <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-[var(--text-main)] group-hover:text-amber-500 transition-colors">
+                              {p.name}
+                            </h3>
+                          </div>
                           <p className="text-xs text-[var(--text-muted)] line-clamp-2 leading-relaxed mb-4">
                             {p.description || 'Menu lezat pilihan khas Ozha Food.'}
                           </p>
                         </div>
 
                         <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] border-dashed">
-                          <span className="font-extrabold text-amber-500 text-base font-[family-name:var(--font-heading)]">
+                          <span className="font-black text-amber-500 text-base font-[family-name:var(--font-heading)]">
                             {formatRupiah(p.price)}
                           </span>
 
                           {isAvailable ? (
-                            <div className="flex items-center gap-2.5 bg-[var(--bg-primary)] p-1 rounded-full border border-[var(--border-color)]">
+                            <div className="flex items-center gap-2 bg-[var(--bg-primary)] p-1 rounded-2xl border border-[var(--border-color)] shadow-inner">
                               <button
                                 type="button"
                                 onClick={() => handleUpdateQty(p.id, -1)}
-                                className="w-7 h-7 rounded-full bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-sm active:scale-95"
+                                className="w-7 h-7 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:hover:bg-[var(--bg-secondary)] disabled:hover:text-[var(--text-main)]"
                                 disabled={qty === 0}
                               >
-                                <Minus className="w-3.5 h-3.5" />
+                                <Minus className="w-3 h-3" />
                               </button>
                               <span
-                                className={`font-bold text-sm min-w-5 text-center ${
-                                  qty > 0 ? 'text-amber-500 font-extrabold scale-110' : 'text-[var(--text-muted)]'
+                                className={`font-black text-sm min-w-5 text-center transition-all ${
+                                  qty > 0 ? 'text-amber-500 scale-110' : 'text-[var(--text-muted)]'
                                 }`}
                               >
                                 {qty}
@@ -583,9 +699,9 @@ export default function CustomerOrderPage() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateQty(p.id, 1)}
-                                className="w-7 h-7 rounded-full bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-sm active:scale-95"
+                                className="w-7 h-7 rounded-xl bg-amber-500 text-white flex items-center justify-center hover:bg-amber-600 transition-all shadow-sm shadow-amber-500/30 active:scale-95"
                               >
-                                <Plus className="w-3.5 h-3.5" />
+                                <Plus className="w-3 h-3" />
                               </button>
                             </div>
                           ) : (
@@ -602,8 +718,9 @@ export default function CustomerOrderPage() {
             </section>
           </div>
 
-          <div className="lg:col-span-5 lg:sticky lg:top-8 flex flex-col gap-6" id="cart-summary-section">
-            <section className="glass-card p-6 sm:p-8">
+          {/* Sticky Right Panel: Bill / Order Summary */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24 flex flex-col gap-6" id="cart-summary-section">
+            <section className="glass-card p-6 sm:p-8 relative overflow-hidden">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                   <ShoppingBag className="w-5 h-5" />
@@ -620,9 +737,11 @@ export default function CustomerOrderPage() {
 
               <div className="flex flex-col gap-3 max-h-64 overflow-y-auto pr-1 mb-5">
                 {cartItems.length === 0 ? (
-                  <div className="py-8 flex flex-col items-center justify-center text-center text-[var(--text-muted)] gap-2 border border-dashed border-[var(--border-color)] rounded-xl">
+                  <div className="py-8 flex flex-col items-center justify-center text-center text-[var(--text-muted)] gap-2 border border-dashed border-[var(--border-color)] rounded-2xl">
                     <ShoppingBag className="w-8 h-8 opacity-30" />
-                    <p className="text-xs font-medium">Belum ada menu yang dipilih.<br />Tambahkan menu kesukaanmu di kiri!</p>
+                    <p className="text-xs font-medium leading-relaxed">
+                      Keranjang masih kosong.<br />Pilih menu lezat di sebelah kiri!
+                    </p>
                   </div>
                 ) : (
                   cartItems.map((item) => (
@@ -632,11 +751,11 @@ export default function CustomerOrderPage() {
                     >
                       <div>
                         <span className="font-semibold text-[var(--text-main)]">{item.productName}</span>
-                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-bold">
+                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-extrabold">
                           {item.quantity}x
                         </span>
                       </div>
-                      <span className="font-bold font-[family-name:var(--font-heading)]">
+                      <span className="font-black font-[family-name:var(--font-heading)]">
                         {formatRupiah(item.subtotal)}
                       </span>
                     </div>
@@ -653,26 +772,31 @@ export default function CustomerOrderPage() {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
-                    placeholder="Contoh: Pentol sambal kacang banyak, siomay bumbu dipisah, dsb."
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-xs font-medium transition-all resize-none"
+                    placeholder="Contoh: Pentol bumbu kacang banyak, siomay sambal dipisah, dll."
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none text-xs font-medium transition-all resize-none"
                   />
                   <FileText className="w-4 h-4 text-[var(--text-muted)] absolute left-4 top-3.5 pointer-events-none" />
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex flex-col gap-2 mb-6">
+              <div className="p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex flex-col gap-2.5 mb-6">
                 <div className="flex justify-between text-xs text-[var(--text-muted)] font-medium">
-                  <span>Subtotal Pesanan</span>
+                  <span>Subtotal ({totalItemsCount} porsi)</span>
                   <span className="font-bold text-[var(--text-main)]">{formatRupiah(totalAmount)}</span>
                 </div>
                 <div className="flex justify-between text-xs text-[var(--text-muted)] font-medium">
-                  <span>Ongkos Kirim & Layanan</span>
-                  <span className="font-bold text-emerald-500">Gratis (Internal)</span>
+                  <span>Ongkos Kirim Kantor</span>
+                  <span className="font-black text-emerald-500">GRATIS</span>
                 </div>
                 <div className="pt-3 border-t border-[var(--border-color)] flex justify-between items-center">
-                  <span className="text-sm font-bold">Total Pembayaran</span>
-                  <span className="text-xl font-extrabold text-amber-500 font-[family-name:var(--font-heading)]">
-                    {formatRupiah(totalAmount)}
+                  <div>
+                    <span className="text-xs text-[var(--text-muted)] block">Total Pembayaran</span>
+                    <span className="text-xl font-black text-amber-500 font-[family-name:var(--font-heading)]">
+                      {formatRupiah(totalAmount)}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                    PO Terverifikasi
                   </span>
                 </div>
               </div>
@@ -681,7 +805,7 @@ export default function CustomerOrderPage() {
                 type="button"
                 onClick={handlePreSubmit}
                 disabled={!isFormValid}
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:from-stone-600 disabled:to-stone-700 disabled:cursor-not-allowed text-white font-bold font-[family-name:var(--font-heading)] text-base shadow-lg shadow-amber-500/25 disabled:shadow-none flex items-center justify-center gap-2 transition-all active:scale-[0.99]"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:from-stone-600 disabled:to-stone-700 disabled:cursor-not-allowed text-white font-extrabold font-[family-name:var(--font-heading)] text-base shadow-xl shadow-amber-500/25 disabled:shadow-none flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
               >
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
