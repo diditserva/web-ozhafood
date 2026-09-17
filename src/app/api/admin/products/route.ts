@@ -21,7 +21,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { name, price, description, imageUrl, category, isActive = true } = body;
 
-    if (!name || typeof price !== 'number' || price < 0) {
+    const parsedPrice = parseInt(String(price), 10);
+
+    if (!name || typeof name !== 'string' || !name.trim() || isNaN(parsedPrice) || parsedPrice < 0) {
       return NextResponse.json(
         { success: false, error: 'Nama dan harga menu wajib diisi dengan benar.' },
         { status: 400 }
@@ -30,20 +32,21 @@ export async function POST(req: NextRequest) {
 
     const newProduct = await db.product.create({
       data: {
-        name,
-        price,
-        description: description || '',
-        imageUrl: imageUrl || '',
-        category: category || 'Makanan',
-        isActive,
+        name: name.trim(),
+        price: parsedPrice,
+        description: description ? String(description).trim() : '',
+        imageUrl: imageUrl ? String(imageUrl).trim() : '',
+        category: category ? String(category).trim() : 'Makanan',
+        isActive: Boolean(isActive),
       },
     });
 
     return NextResponse.json({ success: true, data: newProduct }, { status: 201 });
   } catch (error: unknown) {
     console.error('Error creating product:', error);
+    const errDetail = error instanceof Error ? error.message : 'Kesalahan server';
     return NextResponse.json(
-      { success: false, error: 'Gagal menambahkan produk baru' },
+      { success: false, error: `Gagal menambahkan produk: ${errDetail}` },
       { status: 500 }
     );
   }

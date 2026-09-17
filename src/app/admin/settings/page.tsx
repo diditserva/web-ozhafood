@@ -119,7 +119,7 @@ export default function AdminSettingsPage() {
         <div className="glass-card p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <Building2 className="w-5 h-5 text-orange-700 dark:text-orange-400" />
+              <Building2 className="w-5 h-5 text-[var(--accent)]" />
               <h2 className="text-lg font-bold font-[family-name:var(--font-heading)]">
                 Daftar Divisi ({divisions.length})
               </h2>
@@ -131,11 +131,11 @@ export default function AdminSettingsPage() {
                 value={newDivision}
                 onChange={(e) => setNewDivision(e.target.value)}
                 placeholder="Tambah divisi baru..."
-                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-orange-600"
+                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-[var(--accent)]"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold flex items-center gap-1 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1 transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah</span>
@@ -172,7 +172,7 @@ export default function AdminSettingsPage() {
         <div className="glass-card p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <MapPin className="w-5 h-5 text-emerald-500" />
+              <MapPin className="w-5 h-5 text-[var(--accent)]" />
               <h2 className="text-lg font-bold font-[family-name:var(--font-heading)]">
                 Daftar Lokasi Antar ({locations.length})
               </h2>
@@ -184,11 +184,11 @@ export default function AdminSettingsPage() {
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="Tambah lokasi antar..."
-                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-emerald-500"
+                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-[var(--accent)]"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1 transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah</span>

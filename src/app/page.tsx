@@ -1,90 +1,123 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import confetti from 'canvas-confetti';
 import {
   Utensils,
-  User,
-  MapPin,
+  ShoppingBag,
   Calendar,
   Building2,
-  FileText,
-  ShoppingBag,
+  MapPin,
+  User,
   Plus,
   Minus,
   CheckCircle2,
   AlertCircle,
-  Copy,
-  Download,
-  Maximize2,
-  X,
-  Send,
-  ExternalLink,
-  CreditCard,
-  QrCode,
-  Sparkles,
-  Flame,
   Clock,
-  ChevronRight,
-  ShieldCheck,
-  Search,
+  Sparkles,
   ChefHat,
+  Send,
   Star,
-  Check,
+  ShieldCheck,
   Truck,
-  HeartHandshake,
+  FileText,
+  Search,
+  QrCode,
+  Copy,
+  Maximize2,
+  Download,
+  X,
+  CreditCard,
 } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
 import {
-  ADMIN_WA_NUMBER,
-  BANK_ACCOUNTS,
-  QRIS_IMAGE_DATA,
+  Product,
   formatRupiah,
   formatDateIndo,
+  QRIS_IMAGE_DATA,
+  BANK_ACCOUNTS,
+  DEFAULT_DIVISIONS,
+  DEFAULT_LOCATIONS,
+  FOOD_EMOJIS,
 } from '@/lib/constants';
+import ThemeToggle from '@/components/ThemeToggle';
+import FoodImage from '@/components/FoodImage';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string | null;
-  imageUrl: string | null;
-  isActive: boolean;
-  category: string;
+function getFoodEmoji(name: string): string {
+  const lower = name.toLowerCase();
+  for (const [key, emoji] of Object.entries(FOOD_EMOJIS)) {
+    if (lower.includes(key)) return emoji;
+  }
+  return '🍱';
 }
 
-interface CartItem {
-  productId: string;
-  productName: string;
-  unitPrice: number;
-  quantity: number;
-  subtotal: number;
+function getNextFriday(weeksAhead: number = 0): string {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = (5 - day + 7) % 7 + weeksAhead * 7;
+  d.setDate(d.getDate() + (diff === 0 && weeksAhead === 0 ? 0 : diff));
+  return d.toISOString().split('T')[0];
 }
 
 export default function CustomerOrderPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [divisions, setDivisions] = useState<string[]>([]);
-  const [locations, setLocations] = useState<string[]>([]);
+  const [divisions, setDivisions] = useState<string[]>(DEFAULT_DIVISIONS);
+  const [locations, setLocations] = useState<string[]>(DEFAULT_LOCATIONS);
   const [loading, setLoading] = useState(true);
 
+  // Form inputs
   const [customerName, setCustomerName] = useState('');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
-  const [targetDate, setTargetDate] = useState('');
+  const [targetDate, setTargetDate] = useState(getNextFriday(0));
   const [notes, setNotes] = useState('');
 
+  // Quantities per product
   const [quantities, setQuantities] = useState<Record<string, number>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Filter states
+  const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // UI state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showQrZoom, setShowQrZoom] = useState(false);
-  const [paymentTab, setPaymentTab] = useState<'qris' | 'bank'>('qris');
   const [lastSubmittedOrder, setLastSubmittedOrder] = useState<any>(null);
+  const [paymentTab, setPaymentTab] = useState<'qris' | 'bank'>('qris');
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
-  const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [showQrZoom, setShowQrZoom] = useState(false);
+
+  useEffect(() => {
+    async function initData() {
+      try {
+        const [resProd, resDiv, resLoc] = await Promise.all([
+          fetch('/api/admin/products'),
+          fetch('/api/admin/divisions'),
+          fetch('/api/admin/locations'),
+        ]);
+
+        const jsonProd = await resProd.json();
+        const jsonDiv = await resDiv.json();
+        const jsonLoc = await resLoc.json();
+
+        if (jsonProd.success && jsonProd.data) {
+          setProducts(jsonProd.data);
+        }
+        if (jsonDiv.success && jsonDiv.data && jsonDiv.data.length > 0) {
+          setDivisions(jsonDiv.data.map((d: any) => d.name));
+        }
+        if (jsonLoc.success && jsonLoc.data && jsonLoc.data.length > 0) {
+          setLocations(jsonLoc.data.map((l: any) => l.name));
+        }
+      } catch (err) {
+        console.error('Failed loading data from API', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    initData();
+  }, []);
 
   useEffect(() => {
     if (toastMessage) {
@@ -93,95 +126,73 @@ export default function CustomerOrderPage() {
     }
   }, [toastMessage]);
 
-  const showToast = (text: string, type: 'success' | 'error' = 'success') => {
-    setToastMessage({ text, type });
-  };
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(products.map((p) => p.category || 'Makanan')));
+    return ['Semua', ...cats];
+  }, [products]);
 
-  const getNextFriday = (weeksAhead = 0): string => {
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    let daysUntilFriday = (5 - dayOfWeek + 7) % 7;
-    if (daysUntilFriday === 0 && today.getHours() >= 15) {
-      daysUntilFriday = 7;
-    }
-    const target = new Date();
-    target.setDate(today.getDate() + daysUntilFriday + weeksAhead * 7);
-    return target.toISOString().split('T')[0];
-  };
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const res = await fetch('/api/init');
-        const json = await res.json();
-        if (json.success) {
-          setProducts(json.data.products);
-          setDivisions(json.data.divisions);
-          setLocations(json.data.locations);
-
-          try {
-            const savedName = localStorage.getItem('ozha_cust_name');
-            const savedDiv = localStorage.getItem('ozha_cust_div');
-            const savedLoc = localStorage.getItem('ozha_cust_loc');
-            if (savedName) setCustomerName(savedName);
-            if (savedDiv) setSelectedDivision(savedDiv);
-            if (savedLoc) setSelectedLocation(savedLoc);
-          } catch {
-            // ignore
-          }
-
-          setTargetDate(getNextFriday(0));
-        } else {
-          showToast(json.error || 'Gagal memuat data menu', 'error');
-        }
-      } catch (err) {
-        console.error(err);
-        showToast('Gagal menghubungi server database', 'error');
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
-
-  const handleUpdateQty = (productId: string, delta: number) => {
+  const handleUpdateQty = (id: string, delta: number) => {
     setQuantities((prev) => {
-      const curr = prev[productId] || 0;
-      const next = Math.max(0, Math.min(99, curr + delta));
-      return { ...prev, [productId]: next };
+      const current = prev[id] || 0;
+      const next = Math.max(0, current + delta);
+      if (next === 0) {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      }
+      return { ...prev, [id]: next };
     });
   };
 
-  const cartItems: CartItem[] = useMemo(() => {
-    return products
-      .filter((p) => (quantities[p.id] || 0) > 0)
-      .map((p) => ({
-        productId: p.id,
-        productName: p.name,
-        unitPrice: p.price,
-        quantity: quantities[p.id],
-        subtotal: quantities[p.id] * p.price,
-      }));
-  }, [products, quantities]);
-
-  const totalAmount = useMemo(() => {
-    return cartItems.reduce((sum, it) => sum + it.subtotal, 0);
-  }, [cartItems]);
+  const cartItems = useMemo(() => {
+    return Object.entries(quantities)
+      .map(([productId, qty]) => {
+        const product = products.find((p) => p.id === productId);
+        if (!product || qty <= 0) return null;
+        return {
+          productId,
+          productName: product.name,
+          unitPrice: product.price,
+          quantity: qty,
+          subtotal: product.price * qty,
+        };
+      })
+      .filter(Boolean) as {
+      productId: string;
+      productName: string;
+      unitPrice: number;
+      quantity: number;
+      subtotal: number;
+    }[];
+  }, [quantities, products]);
 
   const totalItemsCount = useMemo(() => {
-    return cartItems.reduce((sum, it) => sum + it.quantity, 0);
+    return Object.values(quantities).reduce((acc, curr) => acc + curr, 0);
+  }, [quantities]);
+
+  const totalAmount = useMemo(() => {
+    return cartItems.reduce((acc, curr) => acc + curr.subtotal, 0);
   }, [cartItems]);
 
-  const isFormValid =
-    customerName.trim().length > 0 &&
-    selectedDivision !== '' &&
-    selectedLocation !== '' &&
-    targetDate !== '' &&
-    totalAmount > 0 &&
-    !isSubmitting;
+  const isFormValid = useMemo(() => {
+    return (
+      customerName.trim().length > 0 &&
+      selectedDivision.length > 0 &&
+      selectedLocation.length > 0 &&
+      targetDate.length > 0 &&
+      cartItems.length > 0
+    );
+  }, [customerName, selectedDivision, selectedLocation, targetDate, cartItems]);
 
   const handlePreSubmit = () => {
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      setToastMessage({
+        text: 'Mohon lengkapi Nama, Divisi, Lokasi, Tanggal & pilih minimal 1 menu!',
+        type: 'error',
+      });
+      return;
+    }
+
     if (!notes.trim()) {
       setShowConfirmModal(true);
     } else {
@@ -193,118 +204,81 @@ export default function CustomerOrderPage() {
     setShowConfirmModal(false);
     setIsSubmitting(true);
 
-    try {
-      try {
-        localStorage.setItem('ozha_cust_name', customerName.trim());
-        localStorage.setItem('ozha_cust_div', selectedDivision);
-        localStorage.setItem('ozha_cust_loc', selectedLocation);
-      } catch {
-        // ignore
-      }
+    const payload = {
+      customerName: customerName.trim(),
+      division: selectedDivision,
+      location: selectedLocation,
+      targetDate,
+      notes: notes.trim() || undefined,
+      paymentMethod: 'QRIS',
+      items: cartItems.map((ci) => ({
+        productId: ci.productId,
+        productName: ci.productName,
+        unitPrice: ci.unitPrice,
+        quantity: ci.quantity,
+      })),
+    };
 
+    try {
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerName: customerName.trim(),
-          division: selectedDivision,
-          location: selectedLocation,
-          targetDate,
-          notes: notes.trim(),
-          paymentMethod: paymentTab === 'qris' ? 'QRIS' : 'TRANSFER_BANK',
-          items: cartItems,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const json = await res.json();
+
       if (json.success) {
         setLastSubmittedOrder(json.data);
         setShowSuccessModal(true);
-
-        try {
-          confetti({
-            particleCount: 120,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#f59e0b', '#fbbf24', '#34d399', '#10b981', '#3b82f6'],
-          });
-        } catch {
-          // ignore
-        }
+        setToastMessage({ text: 'Pesanan PO berhasil dibuat!', type: 'success' });
 
         setQuantities({});
         setNotes('');
-        showToast('Pesanan berhasil disimpan ke sistem!', 'success');
       } else {
-        showToast(json.error || 'Gagal menyimpan pesanan', 'error');
+        setToastMessage({
+          text: json.error || 'Gagal mengirim pesanan. Silakan coba lagi.',
+          type: 'error',
+        });
       }
     } catch (err) {
       console.error(err);
-      showToast('Koneksi terputus saat menyimpan pesanan', 'error');
+      setToastMessage({ text: 'Terjadi kesalahan koneksi ke server.', type: 'error' });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleCopyAccount = (number: string) => {
-    navigator.clipboard.writeText(number).then(() => {
-      setCopiedBank(number);
-      setTimeout(() => setCopiedBank(null), 2500);
-      showToast('Nomor rekening berhasil disalin!', 'success');
-    });
+  const handleCopyAccount = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedBank(text);
+    setTimeout(() => setCopiedBank(null), 2500);
   };
 
   const getWhatsAppLink = (order: any) => {
     if (!order) return '#';
+    const message = `Halo Admin Ozha Food! Saya ingin konfirmasi pembayaran untuk pesanan:
+  
+📌 *No. Order*: #${order.orderCode}
+👤 *Nama*: ${order.customerName}
+🏢 *Divisi*: ${order.division}
+📍 *Lokasi*: ${order.location}
+📅 *Tanggal Kirim*: ${formatDateIndo(order.targetDate)}
+💰 *Total Pembayaran*: ${formatRupiah(order.totalAmount)}
 
-    let msg = `Halo Admin Ozha Food, saya konfirmasi pesanan:\n\n`;
-    msg += `*No. Order:* #${order.orderCode}\n`;
-    msg += `*Nama Pemesan:* ${order.customerName}\n`;
-    msg += `*Divisi:* ${order.division}\n`;
-    msg += `*Lokasi:* ${order.location}\n`;
-    msg += `*Untuk Tanggal:* ${formatDateIndo(order.targetDate)}\n\n`;
-    msg += `*Rincian Menu:*\n`;
+Berikut bukti pembayarannya. Terima kasih!`;
 
-    order.items?.forEach((it: any) => {
-      msg += `- ${it.productName} (${it.quantity}x) = ${formatRupiah(it.subtotal)}\n`;
-    });
-
-    if (order.notes) {
-      msg += `\n*Catatan Tambahan:* ${order.notes}\n`;
-    }
-
-    msg += `\n*Total Pembayaran:* ${formatRupiah(order.totalAmount)}\n`;
-    msg += `*Metode Bayar:* ${order.paymentMethod === 'QRIS' ? 'QRIS' : 'Transfer Bank'}\n\n`;
-    msg += `Bukti transfer/bayar terlampir. Terima kasih!`;
-
-    return `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
   };
-
-  const getFoodEmoji = (name: string) => {
-    const lower = name.toLowerCase();
-    if (lower.includes('pentol')) return '🍢';
-    if (lower.includes('siomay')) return '🥟';
-    if (lower.includes('bakso') || lower.includes('tahu')) return '🧆';
-    if (lower.includes('mie') || lower.includes('bihun')) return '🍜';
-    if (lower.includes('es') || lower.includes('teh') || lower.includes('minum')) return '🥤';
-    return '🍱';
-  };
-
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(products.map((p) => p.category || 'Lainnya')));
-    return ['Semua', ...cats];
-  }, [products]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchCat =
-        selectedCategory === 'ALL' ||
-        selectedCategory === 'Semua' ||
-        (p.category || 'Lainnya').toLowerCase() === selectedCategory.toLowerCase();
-      const matchSearch =
+      const matchesCategory =
+        selectedCategory === 'Semua' || (p.category || 'Makanan') === selectedCategory;
+      const matchesSearch =
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchCat && matchSearch;
+        (p.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
     });
   }, [products, selectedCategory, searchQuery]);
 
@@ -314,12 +288,12 @@ export default function CustomerOrderPage() {
         <div
           className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl backdrop-blur-lg border transition-all animate-in slide-in-from-bottom-5 ${
             toastMessage.type === 'success'
-              ? 'bg-emerald-950/90 text-emerald-100 border-emerald-500/30'
+              ? 'bg-[var(--bg-secondary)] text-[var(--text-main)] border-[var(--border-glow)]'
               : 'bg-red-950/90 text-red-100 border-red-500/30'
           }`}
         >
           {toastMessage.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-[var(--accent)] shrink-0" />
           ) : (
             <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
           )}
@@ -327,23 +301,23 @@ export default function CustomerOrderPage() {
         </div>
       )}
 
-      <div className="fixed top-0 left-1/4 w-96 h-96 bg-orange-700/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-amber-800/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/4 w-96 h-96 bg-[var(--accent-light)] rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-[var(--accent-light)] rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-8">
         {/* Floating Navbar */}
         <header className="sticky top-4 z-30 mb-8 px-4 sm:px-6 py-3.5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-xl shadow-lg flex items-center justify-between transition-all">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-orange-700 to-amber-800 flex items-center justify-center shadow-md shadow-orange-700/25 text-white">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--accent)] flex items-center justify-center shadow-md shadow-[var(--accent)]/25 text-white">
               <Utensils className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 bg-clip-text text-transparent font-[family-name:var(--font-heading)]">
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight gradient-title font-[family-name:var(--font-heading)]">
                   OZHA FOOD
                 </h1>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600/10 text-emerald-600 border border-emerald-600/20">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping inline-block" />
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[var(--accent-light)] text-[var(--accent)] border border-[var(--border-glow)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-ping inline-block" />
                   PO Buka
                 </span>
               </div>
@@ -356,9 +330,9 @@ export default function CustomerOrderPage() {
           <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="/admin"
-              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/80 text-xs font-bold text-[var(--text-muted)] hover:text-orange-700 dark:hover:text-orange-400 hover:border-orange-600/40 transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/80 text-xs font-bold text-[var(--text-muted)] hover:text-[var(--accent)] hover:border-[var(--border-glow)] transition-all shadow-sm"
             >
-              <ChefHat className="w-3.5 h-3.5 text-orange-700 dark:text-orange-400" />
+              <ChefHat className="w-3.5 h-3.5 text-[var(--accent)]" />
               <span className="hidden sm:inline">Panel Dapur</span>
               <span className="sm:hidden">Dapur</span>
             </a>
@@ -367,15 +341,15 @@ export default function CustomerOrderPage() {
         </header>
 
         {/* Hero Banner Section */}
-        <section className="relative overflow-hidden rounded-3xl border border-[var(--border-color)] bg-gradient-to-br from-orange-700/10 via-orange-600/5 to-transparent p-6 sm:p-10 mb-10 shadow-xl backdrop-blur-md">
-          <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-orange-700/15 rounded-full blur-3xl pointer-events-none" />
+        <section className="relative overflow-hidden rounded-3xl border border-[var(--border-color)] bg-gradient-to-br from-[var(--accent-light)] via-transparent to-transparent p-6 sm:p-10 mb-10 shadow-xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-[var(--accent-light)] rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-700/15 border border-orange-700/30 text-orange-700 dark:text-orange-400 text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] border border-[var(--border-glow)] text-[var(--accent)] text-xs font-bold mb-4">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Dibuat Segar Sesuai Pesanan Anda</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-main)] font-[family-name:var(--font-heading)] leading-tight mb-3">
-              Cita Rasa Otentik, <span className="bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 bg-clip-text text-transparent">Dibuat Spesial</span> untuk Harimu.
+              Cita Rasa Otentik, <span className="gradient-title">Dibuat Spesial</span> untuk Harimu.
             </h2>
             <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed mb-6">
               Pilih menu homemade favoritmu, tentukan tanggal antar yang kamu inginkan, dan biarkan dapur kami memasak hidangan hangat dan higienis untukmu.
@@ -383,11 +357,11 @@ export default function CustomerOrderPage() {
 
             <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[var(--text-main)]">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-[var(--accent)]" />
                 <span>100% Halal & Higienis</span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
-                <Truck className="w-4 h-4 text-orange-700 dark:text-orange-400" />
+                <Truck className="w-4 h-4 text-[var(--accent)]" />
                 <span>Antar ke Divisi Kantor Gratis</span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm">
@@ -401,7 +375,7 @@ export default function CustomerOrderPage() {
         {/* 3 Step Process Bar */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
           <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 font-black text-xs flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] font-black text-xs flex items-center justify-center">
               1
             </div>
             <div>
@@ -410,7 +384,7 @@ export default function CustomerOrderPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 font-black text-xs flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] font-black text-xs flex items-center justify-center">
               2
             </div>
             <div>
@@ -419,7 +393,7 @@ export default function CustomerOrderPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 font-black text-xs flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] font-black text-xs flex items-center justify-center">
               3
             </div>
             <div>
@@ -434,7 +408,7 @@ export default function CustomerOrderPage() {
             {/* Step 1: Customer Form */}
             <section className="glass-card p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center">
                   <User className="w-5 h-5" />
                 </div>
                 <div>
@@ -450,7 +424,7 @@ export default function CustomerOrderPage() {
               <div className="flex flex-col gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                    Nama Lengkap <span className="text-orange-700 dark:text-orange-400">*</span>
+                    Nama Lengkap <span className="text-[var(--accent)]">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -458,7 +432,7 @@ export default function CustomerOrderPage() {
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Masukkan nama lengkap Anda"
-                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-medium transition-all"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-[var(--accent)] outline-none text-sm font-medium transition-all"
                     />
                     <User className="w-4 h-4 text-[var(--text-muted)] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
@@ -467,13 +441,13 @@ export default function CustomerOrderPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                      Divisi <span className="text-orange-700 dark:text-orange-400">*</span>
+                      Divisi <span className="text-[var(--accent)]">*</span>
                     </label>
                     <div className="relative">
                       <select
                         value={selectedDivision}
                         onChange={(e) => setSelectedDivision(e.target.value)}
-                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
+                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-[var(--accent)] outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
                       >
                         <option value="">Pilih Divisi Anda</option>
                         {divisions.map((d) => (
@@ -488,13 +462,13 @@ export default function CustomerOrderPage() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                      Lokasi Antar <span className="text-orange-700 dark:text-orange-400">*</span>
+                      Lokasi Antar <span className="text-[var(--accent)]">*</span>
                     </label>
                     <div className="relative">
                       <select
                         value={selectedLocation}
                         onChange={(e) => setSelectedLocation(e.target.value)}
-                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
+                        className="w-full pl-11 pr-8 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-[var(--accent)] outline-none text-sm font-medium transition-all appearance-none cursor-pointer"
                       >
                         <option value="">Pilih Lokasi Antar</option>
                         {locations.map((l) => (
@@ -510,7 +484,7 @@ export default function CustomerOrderPage() {
 
                 <div className="pt-3 border-t border-[var(--border-color)] mt-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
-                    Pesanan untuk Kapan? <span className="text-orange-700 dark:text-orange-400">*</span>
+                    Pesanan untuk Kapan? <span className="text-[var(--accent)]">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -518,9 +492,9 @@ export default function CustomerOrderPage() {
                       value={targetDate}
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => setTargetDate(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-sm font-semibold transition-all cursor-pointer"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-[var(--accent)] outline-none text-sm font-semibold transition-all cursor-pointer"
                     />
-                    <Calendar className="w-4 h-4 text-orange-700 dark:text-orange-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Calendar className="w-4 h-4 text-[var(--accent)] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 mt-2.5">
@@ -530,8 +504,8 @@ export default function CustomerOrderPage() {
                       onClick={() => setTargetDate(getNextFriday(0))}
                       className={`text-xs px-3 py-1 rounded-lg border font-semibold transition-all ${
                         targetDate === getNextFriday(0)
-                          ? 'bg-orange-700 dark:bg-orange-600 text-white border-orange-700 shadow-sm shadow-orange-700/20'
-                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-orange-600/50'
+                          ? 'bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm shadow-[var(--accent)]/20'
+                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--accent)]/50'
                       }`}
                     >
                       Jumat Minggu Ini
@@ -541,8 +515,8 @@ export default function CustomerOrderPage() {
                       onClick={() => setTargetDate(getNextFriday(1))}
                       className={`text-xs px-3 py-1 rounded-lg border font-semibold transition-all ${
                         targetDate === getNextFriday(1)
-                          ? 'bg-orange-700 dark:bg-orange-600 text-white border-orange-700 shadow-sm shadow-orange-700/20'
-                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-orange-600/50'
+                          ? 'bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm shadow-[var(--accent)]/20'
+                          : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--accent)]/50'
                       }`}
                     >
                       Jumat Minggu Depan
@@ -556,7 +530,7 @@ export default function CustomerOrderPage() {
             <section className="glass-card p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center">
                     <Utensils className="w-5 h-5" />
                   </div>
                   <div>
@@ -576,7 +550,7 @@ export default function CustomerOrderPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Cari hidangan..."
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 focus:border-orange-600 outline-none transition-all"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 focus:border-[var(--accent)] outline-none transition-all"
                   />
                   <Search className="w-3.5 h-3.5 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
@@ -592,8 +566,8 @@ export default function CustomerOrderPage() {
                       onClick={() => setSelectedCategory(cat)}
                       className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                         selectedCategory === cat
-                          ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-md shadow-orange-700/20'
-                          : 'bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] text-[var(--text-muted)] hover:border-orange-600/40 hover:text-[var(--text-main)]'
+                          ? 'bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20'
+                          : 'bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--border-glow)] hover:text-[var(--text-main)]'
                       }`}
                     >
                       {cat}
@@ -633,26 +607,21 @@ export default function CustomerOrderPage() {
                           !isAvailable
                             ? 'border-[var(--border-color)]/50 bg-[var(--bg-secondary)]/30 opacity-60'
                             : qty > 0
-                            ? 'border-orange-600 dark:border-orange-500 bg-[var(--bg-secondary)] shadow-xl shadow-orange-700/10 ring-2 ring-orange-600/20'
-                            : 'border-[var(--border-color)] bg-[var(--bg-secondary)]/80 hover:border-orange-600/60 hover:shadow-lg'
+                            ? 'border-[var(--accent)] bg-[var(--bg-secondary)] shadow-xl shadow-[var(--accent)]/10 ring-2 ring-[var(--border-glow)]'
+                            : 'border-[var(--border-color)] bg-[var(--bg-secondary)]/80 hover:border-[var(--border-glow)] hover:shadow-lg'
                         }`}
                       >
                         <div>
-                          <div className="relative h-32 sm:h-36 rounded-2xl bg-gradient-to-br from-orange-700/10 via-orange-600/5 to-transparent border border-[var(--border-color)] flex items-center justify-center overflow-hidden mb-3.5">
-                            {p.imageUrl ? (
-                              <img
-                                src={p.imageUrl}
-                                alt={p.name}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                            ) : (
-                              <span className="text-5xl select-none group-hover:scale-110 transition-transform duration-300">
-                                {getFoodEmoji(p.name)}
-                              </span>
-                            )}
+                          <div className="relative h-32 sm:h-36 rounded-2xl bg-gradient-to-br from-[var(--accent-light)] via-transparent to-transparent border border-[var(--border-color)] flex items-center justify-center overflow-hidden mb-3.5">
+                            <FoodImage
+                              src={p.imageUrl}
+                              alt={p.name}
+                              fallbackEmoji={getFoodEmoji(p.name)}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
 
                             {/* Badge */}
-                            <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-primary)]/90 backdrop-blur-md border border-[var(--border-color)] text-[10px] font-extrabold text-orange-700 dark:text-orange-400 flex items-center gap-1 shadow-sm">
+                            <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-primary)]/90 backdrop-blur-md border border-[var(--border-color)] text-[10px] font-extrabold text-[var(--accent)] flex items-center gap-1 shadow-sm">
                               <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                               <span>Favorit</span>
                             </div>
@@ -665,7 +634,7 @@ export default function CustomerOrderPage() {
                           </div>
 
                           <div className="flex items-start justify-between gap-2 mb-1">
-                            <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-[var(--text-main)] group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors">
+                            <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors">
                               {p.name}
                             </h3>
                           </div>
@@ -675,7 +644,7 @@ export default function CustomerOrderPage() {
                         </div>
 
                         <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] border-dashed">
-                          <span className="font-black text-orange-700 dark:text-orange-400 text-base font-[family-name:var(--font-heading)]">
+                          <span className="font-black text-[var(--accent)] text-base font-[family-name:var(--font-heading)]">
                             {formatRupiah(p.price)}
                           </span>
 
@@ -684,14 +653,14 @@ export default function CustomerOrderPage() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateQty(p.id, -1)}
-                                className="w-7 h-7 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-orange-700 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:hover:bg-[var(--bg-secondary)] disabled:hover:text-[var(--text-main)]"
+                                className="w-7 h-7 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-main)] flex items-center justify-center hover:bg-[var(--accent)] hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:hover:bg-[var(--bg-secondary)] disabled:hover:text-[var(--text-main)]"
                                 disabled={qty === 0}
                               >
                                 <Minus className="w-3 h-3" />
                               </button>
                               <span
                                 className={`font-black text-sm min-w-5 text-center transition-all ${
-                                  qty > 0 ? 'text-orange-700 dark:text-orange-400 scale-110' : 'text-[var(--text-muted)]'
+                                  qty > 0 ? 'text-[var(--accent)] scale-110' : 'text-[var(--text-muted)]'
                                 }`}
                               >
                                 {qty}
@@ -699,7 +668,7 @@ export default function CustomerOrderPage() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateQty(p.id, 1)}
-                                className="w-7 h-7 rounded-xl bg-orange-700 dark:bg-orange-600 text-white flex items-center justify-center hover:bg-orange-800 dark:hover:bg-orange-700 transition-all shadow-sm shadow-orange-700/30 active:scale-95"
+                                className="w-7 h-7 rounded-xl bg-[var(--accent)] text-white flex items-center justify-center hover:bg-[var(--accent-hover)] transition-all shadow-sm shadow-[var(--accent)]/30 active:scale-95"
                               >
                                 <Plus className="w-3 h-3" />
                               </button>
@@ -722,7 +691,7 @@ export default function CustomerOrderPage() {
           <div className="lg:col-span-5 lg:sticky lg:top-24 flex flex-col gap-6" id="cart-summary-section">
             <section className="glass-card p-6 sm:p-8 relative overflow-hidden">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center">
                   <ShoppingBag className="w-5 h-5" />
                 </div>
                 <div>
@@ -751,7 +720,7 @@ export default function CustomerOrderPage() {
                     >
                       <div>
                         <span className="font-semibold text-[var(--text-main)]">{item.productName}</span>
-                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-orange-700/10 text-orange-700 dark:text-orange-400 font-extrabold">
+                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-[var(--accent-light)] text-[var(--accent)] font-extrabold">
                           {item.quantity}x
                         </span>
                       </div>
@@ -773,7 +742,7 @@ export default function CustomerOrderPage() {
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
                     placeholder="Contoh: Pentol bumbu kacang banyak, siomay sambal dipisah, dll."
-                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-orange-600 focus:ring-4 focus:ring-orange-600/10 outline-none text-xs font-medium transition-all resize-none"
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 focus:bg-[var(--bg-secondary)] focus:border-[var(--accent)] outline-none text-xs font-medium transition-all resize-none"
                   />
                   <FileText className="w-4 h-4 text-[var(--text-muted)] absolute left-4 top-3.5 pointer-events-none" />
                 </div>
@@ -786,16 +755,16 @@ export default function CustomerOrderPage() {
                 </div>
                 <div className="flex justify-between text-xs text-[var(--text-muted)] font-medium">
                   <span>Ongkos Kirim Kantor</span>
-                  <span className="font-black text-emerald-600 dark:text-emerald-400">GRATIS</span>
+                  <span className="font-black text-[var(--accent)]">GRATIS</span>
                 </div>
                 <div className="pt-3 border-t border-[var(--border-color)] flex justify-between items-center">
                   <div>
                     <span className="text-xs text-[var(--text-muted)] block">Total Pembayaran</span>
-                    <span className="text-xl font-black text-orange-700 dark:text-orange-400 font-[family-name:var(--font-heading)]">
+                    <span className="text-xl font-black text-[var(--accent)] font-[family-name:var(--font-heading)]">
                       {formatRupiah(totalAmount)}
                     </span>
                   </div>
-                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-orange-700/10 text-orange-700 dark:text-orange-400 border border-orange-700/20">
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-[var(--accent-light)] text-[var(--accent)] border border-[var(--border-glow)]">
                     PO Terverifikasi
                   </span>
                 </div>
@@ -805,7 +774,7 @@ export default function CustomerOrderPage() {
                 type="button"
                 onClick={handlePreSubmit}
                 disabled={!isFormValid}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-700 via-orange-600 to-amber-700 hover:from-orange-800 hover:to-amber-800 disabled:from-stone-600 disabled:to-stone-700 disabled:cursor-not-allowed text-white font-extrabold font-[family-name:var(--font-heading)] text-base shadow-xl shadow-orange-700/25 disabled:shadow-none flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
+                className="w-full py-4 rounded-2xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:from-stone-600 disabled:to-stone-700 disabled:cursor-not-allowed text-white font-extrabold font-[family-name:var(--font-heading)] text-base shadow-xl shadow-[var(--accent)]/25 disabled:shadow-none flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
               >
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -828,7 +797,7 @@ export default function CustomerOrderPage() {
             onClick={() => {
               document.getElementById('cart-summary-section')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="w-full p-4 rounded-2xl bg-orange-700 text-white font-bold flex items-center justify-between shadow-xl shadow-orange-700/40 active:scale-95 transition-all"
+            className="w-full p-4 rounded-2xl bg-[var(--accent)] text-white font-bold flex items-center justify-between shadow-xl shadow-[var(--accent)]/40 active:scale-95 transition-all"
           >
             <div className="flex flex-col text-left">
               <span className="text-xs uppercase tracking-wider font-extrabold opacity-90">
@@ -849,7 +818,7 @@ export default function CustomerOrderPage() {
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="glass-card max-w-sm w-full p-6 text-center flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center">
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
@@ -871,7 +840,7 @@ export default function CustomerOrderPage() {
               <button
                 type="button"
                 onClick={executeSubmit}
-                className="py-2.5 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold transition-all shadow-md shadow-orange-700/20"
+                className="py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold transition-all shadow-md shadow-[var(--accent)]/20"
               >
                 Ya, Lanjutkan
               </button>
@@ -883,7 +852,7 @@ export default function CustomerOrderPage() {
       {showSuccessModal && lastSubmittedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md overflow-y-auto">
           <div className="glass-card max-w-lg w-full p-6 sm:p-8 flex flex-col items-center my-auto animate-in zoom-in-95 duration-200">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-full bg-[var(--accent-light)] border-2 border-[var(--border-glow)] text-[var(--accent)] flex items-center justify-center mb-4">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
@@ -897,7 +866,7 @@ export default function CustomerOrderPage() {
             <div className="w-full p-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-xs mb-6 flex flex-col gap-2">
               <div className="flex justify-between pb-2 border-b border-[var(--border-color)] font-bold text-sm">
                 <span>No. Order</span>
-                <span className="text-orange-700 dark:text-orange-400 font-mono">#{lastSubmittedOrder.orderCode}</span>
+                <span className="text-[var(--accent)] font-mono">#{lastSubmittedOrder.orderCode}</span>
               </div>
               <div className="flex justify-between text-[var(--text-muted)]">
                 <span>Nama Pemesan:</span>
@@ -911,13 +880,13 @@ export default function CustomerOrderPage() {
               </div>
               <div className="flex justify-between text-[var(--text-muted)]">
                 <span>Tanggal Kebutuhan:</span>
-                <span className="font-semibold text-orange-700 dark:text-orange-400">
+                <span className="font-semibold text-[var(--accent)]">
                   {formatDateIndo(lastSubmittedOrder.targetDate)}
                 </span>
               </div>
               <div className="pt-2 border-t border-[var(--border-color)] border-dashed flex justify-between font-bold text-sm">
                 <span>Total Tagihan:</span>
-                <span className="text-orange-700 dark:text-orange-400 text-base font-[family-name:var(--font-heading)] font-extrabold">
+                <span className="text-[var(--accent)] text-base font-[family-name:var(--font-heading)] font-extrabold">
                   {formatRupiah(lastSubmittedOrder.totalAmount)}
                 </span>
               </div>
@@ -925,7 +894,7 @@ export default function CustomerOrderPage() {
 
             <div className="w-full mb-6">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3">
-                <CreditCard className="w-4 h-4 text-orange-700 dark:text-orange-400" />
+                <CreditCard className="w-4 h-4 text-[var(--accent)]" />
                 <span>Pilih Metode Pembayaran:</span>
               </div>
 
@@ -935,7 +904,7 @@ export default function CustomerOrderPage() {
                   onClick={() => setPaymentTab('qris')}
                   className={`py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                     paymentTab === 'qris'
-                      ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-sm'
+                      ? 'bg-[var(--accent)] text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                   }`}
                 >
@@ -947,7 +916,7 @@ export default function CustomerOrderPage() {
                   onClick={() => setPaymentTab('bank')}
                   className={`py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                     paymentTab === 'bank'
-                      ? 'bg-orange-700 dark:bg-orange-600 text-white shadow-sm'
+                      ? 'bg-[var(--accent)] text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                   }`}
                 >
@@ -974,7 +943,7 @@ export default function CustomerOrderPage() {
                     <button
                       type="button"
                       onClick={() => setShowQrZoom(true)}
-                      className="flex-1 py-2 px-3 rounded-lg border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-orange-600 transition-colors"
+                      className="flex-1 py-2 px-3 rounded-lg border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors"
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
                       <span>Perbesar</span>
@@ -982,7 +951,7 @@ export default function CustomerOrderPage() {
                     <a
                       href={QRIS_IMAGE_DATA}
                       download="QRIS_OzhaFood.svg"
-                      className="flex-1 py-2 px-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-orange-600 transition-colors"
+                      className="flex-1 py-2 px-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Unduh QR</span>
@@ -999,7 +968,7 @@ export default function CustomerOrderPage() {
                       className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between"
                     >
                       <div>
-                        <div className="text-[11px] font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">
+                        <div className="text-[11px] font-black text-[var(--accent)] uppercase tracking-wider">
                           {b.bank}
                         </div>
                         <div className="text-base font-mono font-bold tracking-wider text-[var(--text-main)]">
@@ -1012,8 +981,8 @@ export default function CustomerOrderPage() {
                         onClick={() => handleCopyAccount(b.number)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
                           copiedBank === b.number
-                            ? 'bg-emerald-600 text-white'
-                            : 'bg-orange-700/10 text-orange-700 dark:text-orange-400 hover:bg-orange-700 hover:text-white'
+                            ? 'bg-[var(--accent)] text-white'
+                            : 'bg-[var(--accent-light)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white'
                         }`}
                       >
                         <Copy className="w-3 h-3" />
@@ -1029,7 +998,7 @@ export default function CustomerOrderPage() {
               href={getWhatsAppLink(lastSubmittedOrder)}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-[family-name:var(--font-heading)] text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 mb-3 transition-all"
+              className="w-full py-4 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white font-bold font-[family-name:var(--font-heading)] text-sm flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/25 mb-3 transition-all"
             >
               <Send className="w-4 h-4" />
               <span>Konfirmasi Pesanan ke WhatsApp Admin</span>
@@ -1058,7 +1027,7 @@ export default function CustomerOrderPage() {
             <button
               type="button"
               onClick={() => setShowQrZoom(false)}
-              className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-700 text-white flex items-center justify-center font-bold shadow-lg"
+              className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center font-bold shadow-lg"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1072,4 +1041,3 @@ export default function CustomerOrderPage() {
     </div>
   );
 }
-

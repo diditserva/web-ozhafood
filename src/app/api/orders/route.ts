@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { OrderStatus } from '@prisma/client';
+import { sendTelegramOrderNotification } from '@/lib/telegram';
 
 export async function GET(req: NextRequest) {
   try {
@@ -139,6 +140,11 @@ export async function POST(req: NextRequest) {
       include: {
         items: true,
       },
+    });
+
+    // Send async external notification (e.g. Telegram) if configured
+    sendTelegramOrderNotification(order).catch((err) => {
+      console.warn('Failed to send telegram notification:', err);
     });
 
     return NextResponse.json({

@@ -31,6 +31,25 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${outfit.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('Ozha-theme');
+                  var mode = (saved === 'light' || saved === 'dark' || saved === 'system') ? saved : 'system';
+                  var resolved = mode;
+                  if (mode === 'system') {
+                    resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  document.documentElement.setAttribute('data-theme', resolved);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col antialiased selection:bg-amber-500 selection:text-white">
         {children}
       </body>

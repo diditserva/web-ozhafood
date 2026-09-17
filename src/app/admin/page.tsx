@@ -19,27 +19,36 @@ export default function AdminDashboardPage() {
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchDashboardData() {
-      try {
-        const res = await fetch('/api/admin/reports');
-        const json = await res.json();
-        if (json.success) {
-          setReportData(json.data);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+  const fetchDashboardData = async () => {
+    try {
+      const res = await fetch('/api/admin/reports');
+      const json = await res.json();
+      if (json.success) {
+        setReportData(json.data);
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     fetchDashboardData();
+
+    const handleNewOrder = () => {
+      fetchDashboardData();
+    };
+    window.addEventListener('ozha:new-order', handleNewOrder);
+    return () => {
+      window.removeEventListener('ozha:new-order', handleNewOrder);
+    };
   }, []);
 
   if (loading) {
     return (
       <div className="py-20 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-3 border-orange-700/30 border-t-orange-700 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-[var(--accent)]/30 border-t-[var(--accent)] rounded-full animate-spin" />
         <p className="text-sm font-semibold text-[var(--text-muted)]">Memuat data dashboard...</p>
       </div>
     );
@@ -53,9 +62,9 @@ export default function AdminDashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       {/* Header Banner */}
-      <div className="glass-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-l-4 border-l-orange-700">
+      <div className="glass-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-l-4 border-l-[var(--accent)]">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-700/10 text-orange-700 dark:text-orange-400 text-xs font-bold mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent)] border border-[var(--border-glow)] text-xs font-bold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Ozha Food Operational Center</span>
           </div>
@@ -69,7 +78,7 @@ export default function AdminDashboardPage() {
 
         <Link
           href="/admin/orders"
-          className="px-5 py-3 rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-orange-700/20 transition-all active:scale-95 shrink-0"
+          className="px-5 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-[var(--accent)]/20 transition-all active:scale-95 shrink-0"
         >
           <span>Buka Rekap Dapur Lengkap</span>
           <ArrowRight className="w-4 h-4" />
@@ -84,12 +93,12 @@ export default function AdminDashboardPage() {
             <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
               Total Omzet
             </span>
-            <div className="text-xl sm:text-2xl font-black font-[family-name:var(--font-heading)] text-orange-700 dark:text-orange-400 mt-1">
+            <div className="text-xl sm:text-2xl font-black font-[family-name:var(--font-heading)] text-[var(--accent)] mt-1">
               {formatRupiah(summary.totalRevenue)}
             </div>
             <span className="text-[11px] text-[var(--text-muted)]">Akumulasi pesanan aktif</span>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center shrink-0">
             <TrendingUp className="w-6 h-6" />
           </div>
         </div>
@@ -105,7 +114,7 @@ export default function AdminDashboardPage() {
             </div>
             <span className="text-[11px] text-[var(--text-muted)]">Transaksi tersimpan di database</span>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-orange-700/10 text-orange-700 dark:text-orange-400 flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center shrink-0">
             <ShoppingBag className="w-6 h-6" />
           </div>
         </div>
@@ -121,7 +130,7 @@ export default function AdminDashboardPage() {
             </div>
             <span className="text-[11px] text-[var(--text-muted)]">Menu yang pernah dipesan</span>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center shrink-0">
             <Utensils className="w-6 h-6" />
           </div>
         </div>
@@ -137,7 +146,7 @@ export default function AdminDashboardPage() {
             </div>
             <span className="text-[11px] text-[var(--text-muted)]">Variasi target date</span>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center shrink-0">
             <Calendar className="w-6 h-6" />
           </div>
         </div>
@@ -150,14 +159,14 @@ export default function AdminDashboardPage() {
           <div className="glass-card p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2.5">
-                <Utensils className="w-5 h-5 text-orange-700 dark:text-orange-400" />
+                <Utensils className="w-5 h-5 text-[var(--accent)]" />
                 <h2 className="text-base sm:text-lg font-bold font-[family-name:var(--font-heading)]">
                   Total Porsi per Menu yang Harus Dimasak
                 </h2>
               </div>
               <Link
                 href="/admin/orders"
-                className="text-xs font-bold text-orange-700 dark:text-orange-400 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-[var(--accent)] hover:underline flex items-center gap-1"
               >
                 Detail Harian <ArrowRight className="w-3.5 h-3.5" />
               </Link>
@@ -180,7 +189,7 @@ export default function AdminDashboardPage() {
                         Nilai: {formatRupiah(item.revenue)}
                       </span>
                     </div>
-                    <div className="px-3.5 py-1.5 rounded-xl bg-orange-700/10 border border-orange-700/20 text-orange-700 dark:text-orange-400 font-extrabold text-base font-[family-name:var(--font-heading)]">
+                    <div className="px-3.5 py-1.5 rounded-xl bg-[var(--accent-light)] border border-[var(--border-glow)] text-[var(--accent)] font-extrabold text-base font-[family-name:var(--font-heading)]">
                       {item.quantity} porsi
                     </div>
                   </div>
@@ -192,7 +201,7 @@ export default function AdminDashboardPage() {
           {/* Quick Schedule List */}
           <div className="glass-card p-6">
             <div className="flex items-center gap-2.5 mb-4">
-              <Calendar className="w-5 h-5 text-purple-500" />
+              <Calendar className="w-5 h-5 text-[var(--accent)]" />
               <h2 className="text-base sm:text-lg font-bold font-[family-name:var(--font-heading)]">
                 Jadwal Batch Pemesanan Terdekat
               </h2>
@@ -206,10 +215,10 @@ export default function AdminDashboardPage() {
                   <Link
                     key={row.date}
                     href={`/admin/orders?targetDate=${row.date}`}
-                    className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-orange-600 flex items-center justify-between transition-all"
+                    className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--accent)] flex items-center justify-between transition-all"
                   >
                     <div className="flex items-center gap-3">
-                      <Clock className="w-4 h-4 text-orange-700 dark:text-orange-400" />
+                      <Clock className="w-4 h-4 text-[var(--accent)]" />
                       <div>
                         <div className="text-sm font-bold text-[var(--text-main)]">
                           {formatDateIndo(row.date)}
@@ -220,7 +229,7 @@ export default function AdminDashboardPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-extrabold text-orange-700 dark:text-orange-400 font-[family-name:var(--font-heading)]">
+                      <div className="text-sm font-extrabold text-[var(--accent)] font-[family-name:var(--font-heading)]">
                         {formatRupiah(row.revenue)}
                       </div>
                       <span className="text-[11px] text-[var(--text-muted)]">Buka Pesanan &rarr;</span>
@@ -237,7 +246,7 @@ export default function AdminDashboardPage() {
           {/* Divisi Breakdown */}
           <div className="glass-card p-6">
             <div className="flex items-center gap-2.5 mb-4">
-              <Building2 className="w-5 h-5 text-orange-700 dark:text-orange-400" />
+              <Building2 className="w-5 h-5 text-[var(--accent)]" />
               <h2 className="text-base sm:text-lg font-bold font-[family-name:var(--font-heading)]">
                 Pesanan per Divisi
               </h2>
@@ -253,7 +262,7 @@ export default function AdminDashboardPage() {
                     className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--bg-primary)] text-xs border border-[var(--border-color)]"
                   >
                     <span className="font-semibold text-[var(--text-main)]">{div.name}</span>
-                    <span className="px-2 py-0.5 rounded-md bg-orange-700/10 text-orange-700 dark:text-orange-400 font-bold">
+                    <span className="px-2 py-0.5 rounded-md bg-[var(--accent-light)] text-[var(--accent)] font-bold">
                       {div.count} order
                     </span>
                   </div>
@@ -270,10 +279,10 @@ export default function AdminDashboardPage() {
 
             <Link
               href="/admin/products"
-              className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-orange-600 flex items-center justify-between text-xs font-bold transition-all"
+              className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-[var(--accent)] flex items-center justify-between text-xs font-bold transition-all"
             >
               <div className="flex items-center gap-2.5">
-                <Utensils className="w-4 h-4 text-orange-700 dark:text-orange-400" />
+                <Utensils className="w-4 h-4 text-[var(--accent)]" />
                 <span>Atur Ketersediaan Menu (Aktif/Habis)</span>
               </div>
               <ArrowRight className="w-3.5 h-3.5 text-[var(--text-muted)]" />
@@ -281,10 +290,10 @@ export default function AdminDashboardPage() {
 
             <Link
               href="/admin/settings"
-              className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-orange-600 flex items-center justify-between text-xs font-bold transition-all"
+              className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-[var(--accent)] flex items-center justify-between text-xs font-bold transition-all"
             >
               <div className="flex items-center gap-2.5">
-                <MapPin className="w-4 h-4 text-orange-700 dark:text-orange-400" />
+                <MapPin className="w-4 h-4 text-[var(--accent)]" />
                 <span>Kelola Daftar Divisi & Lokasi Antar</span>
               </div>
               <ArrowRight className="w-3.5 h-3.5 text-[var(--text-muted)]" />
@@ -293,10 +302,10 @@ export default function AdminDashboardPage() {
             <Link
               href="/"
               target="_blank"
-              className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-amber-500 flex items-center justify-between text-xs font-bold transition-all"
+              className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-[var(--accent)] flex items-center justify-between text-xs font-bold transition-all"
             >
               <div className="flex items-center gap-2.5">
-                <ShoppingBag className="w-4 h-4 text-purple-500" />
+                <ShoppingBag className="w-4 h-4 text-[var(--accent)]" />
                 <span>Buka Formulir Pemesanan Customer</span>
               </div>
               <ArrowRight className="w-3.5 h-3.5 text-[var(--text-muted)]" />

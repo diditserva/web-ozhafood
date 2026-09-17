@@ -1,3 +1,13 @@
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category?: string;
+  description?: string;
+  imageUrl?: string;
+  isActive: boolean;
+}
+
 export const ADMIN_WA_NUMBER = "6285648020406";
 
 export const BANK_ACCOUNTS = [
@@ -14,6 +24,36 @@ export const BANK_ACCOUNTS = [
 ];
 
 export const QRIS_IMAGE_DATA = "/qris-ozhafood.svg";
+
+export const DEFAULT_DIVISIONS = [
+  "General",
+  "IT & Tech",
+  "Marketing",
+  "Finance",
+  "HRD & GA",
+  "Operations",
+  "Sales",
+];
+
+export const DEFAULT_LOCATIONS = [
+  "Lantai 1",
+  "Lantai 2",
+  "Lantai 3",
+  "Lantai 4",
+  "Lobi Utama",
+  "Pantry",
+];
+
+export const FOOD_EMOJIS: Record<string, string> = {
+  pentol: "🧆",
+  siomay: "🥟",
+  tahu: "🧊",
+  gorengan: "🥠",
+  minuman: "🥤",
+  es: "🍹",
+  teh: "🍵",
+  kopi: "☕",
+};
 
 export function formatRupiah(amount: number): string {
   return "Rp " + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
