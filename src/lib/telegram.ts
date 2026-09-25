@@ -37,14 +37,24 @@ export async function sendTelegramOrderNotification(order: OrderData): Promise<b
 
     const targetDateFormatted = formatDateIndo(order.targetDate);
     const payment = order.paymentMethod === 'QRIS' ? 'QRIS' : 'Transfer Bank';
-    const notesText = order.notes ? `\n📝 *Catatan:* ${order.notes}` : '';
+
+    const phoneMatch = order.notes?.match(/\[WA:\s*([^\]]+)\]/);
+    const mapsMatch = order.notes?.match(/\[Peta:\s*([^\]]+)\]/);
+    const cleanNotes = order.notes
+      ?.replace(/\[WA:\s*[^\]]+\]/g, '')
+      .replace(/\[Peta:\s*[^\]]+\]/g, '')
+      .trim();
+
+    const phoneText = phoneMatch ? `\n📱 *WhatsApp:* [${phoneMatch[1]}](https://wa.me/${phoneMatch[1].replace(/\D/g, '')})` : '';
+    const mapsText = mapsMatch ? `\n🗺️ *Titik GPS:* [Buka di Google Maps](${mapsMatch[1]})` : '';
+    const notesText = cleanNotes ? `\n📝 *Catatan:* ${cleanNotes}` : '';
 
     const message = `🔔 *PESANAN BARU MASUK!*
 ━━━━━━━━━━━━━━━━━━━━
 📦 *No. Order:* #${order.orderCode}
-👤 *Pemesan:* ${order.customerName}
-🏢 *Divisi:* ${order.division}
-📍 *Lokasi:* ${order.location}
+👤 *Pemesan:* ${order.customerName}${phoneText}
+🏢 *Tipe/Divisi:* ${order.division}
+📍 *Tujuan/Lokasi:* ${order.location}${mapsText}
 📅 *Tanggal Kirim:* ${targetDateFormatted}
 
 🛒 *Menu Pesanan:*

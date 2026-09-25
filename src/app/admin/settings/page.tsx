@@ -116,10 +116,12 @@ export default function AdminSettingsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Divisi Card */}
-        <div className="glass-card p-6 flex flex-col justify-between">
+        <div className="glass-card card-interactive p-6 flex flex-col justify-between transition-all duration-300">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <Building2 className="w-5 h-5 text-[var(--accent)]" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
+                <Building2 className="w-4 h-4" />
+              </div>
               <h2 className="text-lg font-bold font-[family-name:var(--font-heading)]">
                 Daftar Divisi ({divisions.length})
               </h2>
@@ -131,11 +133,11 @@ export default function AdminSettingsPage() {
                 value={newDivision}
                 onChange={(e) => setNewDivision(e.target.value)}
                 placeholder="Tambah divisi baru..."
-                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-[var(--accent)]"
+                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-[var(--accent)] transition-colors"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1 transition-all btn-press shimmer-effect shadow-md shadow-[var(--accent)]/20 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah</span>
@@ -151,13 +153,14 @@ export default function AdminSettingsPage() {
                 divisions.map((d) => (
                   <div
                     key={d.id}
-                    className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between text-xs"
+                    className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between text-xs hover:border-[var(--accent)]/40 transition-all group"
                   >
-                    <span className="font-semibold">{d.name}</span>
+                    <span className="font-semibold group-hover:text-[var(--accent)] transition-colors">{d.name}</span>
                     <button
                       type="button"
                       onClick={() => handleDeleteDivision(d.id)}
-                      className="text-[var(--text-muted)] hover:text-red-400 transition-colors"
+                      className="text-[var(--text-muted)] hover:text-red-500 hover:bg-red-500/10 p-1 rounded-lg transition-all btn-press"
+                      title="Hapus Divisi"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -169,10 +172,12 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Lokasi Card */}
-        <div className="glass-card p-6 flex flex-col justify-between">
+        <div className="glass-card card-interactive p-6 flex flex-col justify-between transition-all duration-300">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <MapPin className="w-5 h-5 text-[var(--accent)]" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
+                <MapPin className="w-4 h-4" />
+              </div>
               <h2 className="text-lg font-bold font-[family-name:var(--font-heading)]">
                 Daftar Lokasi Antar ({locations.length})
               </h2>
@@ -184,11 +189,11 @@ export default function AdminSettingsPage() {
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="Tambah lokasi antar..."
-                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-[var(--accent)]"
+                className="flex-1 px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs font-medium outline-none focus:border-[var(--accent)] transition-colors"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1 transition-all btn-press shimmer-effect shadow-md shadow-[var(--accent)]/20 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah</span>
@@ -204,13 +209,14 @@ export default function AdminSettingsPage() {
                 locations.map((l) => (
                   <div
                     key={l.id}
-                    className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between text-xs"
+                    className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between text-xs hover:border-[var(--accent)]/40 transition-all group"
                   >
-                    <span className="font-semibold">{l.name}</span>
+                    <span className="font-semibold group-hover:text-[var(--accent)] transition-colors">{l.name}</span>
                     <button
                       type="button"
                       onClick={() => handleDeleteLocation(l.id)}
-                      className="text-[var(--text-muted)] hover:text-red-400 transition-colors"
+                      className="text-[var(--text-muted)] hover:text-red-500 hover:bg-red-500/10 p-1 rounded-lg transition-all btn-press"
+                      title="Hapus Lokasi"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

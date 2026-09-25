@@ -1,24 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #f5f8f5;
+  /* Surfaces & Backgrounds - Clean, soft organic warm off-white */
+  --bg-primary: #f7faf7;
   --bg-secondary: #ffffff;
   --bg-glass: rgba(255, 255, 255, 0.90);
   --bg-glass-hover: rgba(255, 255, 255, 0.98);
-  --border-color: rgba(215, 230, 218, 0.85);
+  --border-color: rgba(215, 230, 219, 0.85);
   --text-main: #142217;
   --text-muted: #576d5c;
   --text-inverse: #ffffff;
 
-  /* Default Accent (Emerald Fresh) */
+  /* Primary Culinary Herb Accent (Fresh Emerald) */
   --accent: #15803d;
   --accent-hover: #166534;
   --accent-rgb: 21, 128, 61;
-  --accent-light: rgba(21, 128, 61, 0.1);
-  --gradient-start: #22c55e;
-  --gradient-end: #15803d;
+  --accent-light: rgba(21, 128, 61, 0.09);
   --border-glow: rgba(34, 197, 94, 0.28);
-  --glow-accent: 0 0 25px rgba(21, 128, 61, 0.2);
+  --glow-accent: 0 0 25px rgba(21, 128, 61, 0.15);
+
+  /* Warm Culinary Accent (Soft Peach / Warm Amber - Appetizing & Friendly) */
+  --warm: #d97706;
+  --warm-hover: #b45309;
+  --warm-rgb: 217, 119, 6;
+  --warm-light: rgba(217, 119, 6, 0.09);
+  --warm-border: rgba(217, 119, 6, 0.25);
+
+  /* Soft Coral Accent (Highlights, Favorites, Urgent, Special Dishes) */
+  --coral: #e11d48;
+  --coral-light: rgba(225, 29, 72, 0.08);
+  --coral-border: rgba(225, 29, 72, 0.22);
+
+  /* Soft Sky Accent (Logistics, Schedule, Locations, Badges) */
+  --sky: #0284c7;
+  --sky-light: rgba(2, 132, 199, 0.08);
+  --sky-border: rgba(2, 132, 199, 0.22);
+
+  /* Soft Multi-Tone Gradients for Titles & Highlights */
+  --gradient-start: #16a34a;
+  --gradient-mid: #0d9488;
+  --gradient-end: #d97706;
 
   --shadow-sm: 0 2px 8px rgba(20, 34, 23, 0.04);
   --shadow-md: 0 12px 30px -4px rgba(20, 34, 23, 0.06), 0 4px 12px -2px rgba(20, 34, 23, 0.04);
@@ -31,140 +52,49 @@
 }
 
 [data-theme="dark"] {
-  --bg-primary: #0a110c;
-  --bg-secondary: #121c14;
-  --bg-glass: rgba(18, 28, 20, 0.85);
-  --bg-glass-hover: rgba(24, 38, 27, 0.95);
-  --border-color: rgba(36, 56, 40, 0.85);
+  /* Surfaces & Backgrounds - Deep, comfortable atmospheric dark slate */
+  --bg-primary: #0a120d;
+  --bg-secondary: #121c15;
+  --bg-glass: rgba(18, 28, 21, 0.85);
+  --bg-glass-hover: rgba(24, 38, 28, 0.95);
+  --border-color: rgba(36, 56, 42, 0.85);
   --text-main: #f2f7f3;
   --text-muted: #8ba590;
-  --text-inverse: #0a110c;
+  --text-inverse: #0a120d;
 
-  /* Default Dark Emerald */
+  /* Primary Culinary Accent (Soft Fresh Mint) */
   --accent: #22c55e;
   --accent-hover: #4ade80;
   --accent-rgb: 34, 197, 94;
   --accent-light: rgba(34, 197, 94, 0.14);
-  --gradient-start: #4ade80;
-  --gradient-end: #16a34a;
   --border-glow: rgba(74, 222, 128, 0.35);
-  --glow-accent: 0 0 30px rgba(34, 197, 94, 0.25);
+  --glow-accent: 0 0 30px rgba(34, 197, 94, 0.2);
+
+  /* Warm Accent (Soft Golden Apricot / Amber) */
+  --warm: #f59e0b;
+  --warm-hover: #fbbf24;
+  --warm-rgb: 245, 158, 11;
+  --warm-light: rgba(245, 158, 11, 0.14);
+  --warm-border: rgba(245, 158, 11, 0.3);
+
+  /* Soft Coral Accent */
+  --coral: #fb7185;
+  --coral-light: rgba(251, 113, 133, 0.14);
+  --coral-border: rgba(251, 113, 133, 0.3);
+
+  /* Soft Sky Accent */
+  --sky: #38bdf8;
+  --sky-light: rgba(56, 189, 248, 0.14);
+  --sky-border: rgba(56, 189, 248, 0.3);
+
+  /* Dual-Tone Gradients */
+  --gradient-start: #4ade80;
+  --gradient-mid: #2dd4bf;
+  --gradient-end: #fbbf24;
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 16px 36px -4px rgba(0, 0, 0, 0.5), 0 4px 12px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 32px 64px -12px rgba(0, 0, 0, 0.7), 0 16px 32px -8px rgba(0, 0, 0, 0.5);
-}
-
-/* ==========================================================================
-   COLOR PRESETS (LIGHT MODE)
-   ========================================================================== */
-
-[data-color-preset="amber"] {
-  --accent: #ea580c;
-  --accent-hover: #c2410c;
-  --accent-rgb: 234, 88, 12;
-  --accent-light: rgba(234, 88, 12, 0.1);
-  --gradient-start: #f97316;
-  --gradient-end: #c2410c;
-  --border-glow: rgba(249, 115, 22, 0.3);
-  --glow-accent: 0 0 25px rgba(234, 88, 12, 0.25);
-  --border-color: rgba(245, 215, 190, 0.85);
-}
-
-[data-color-preset="crimson"] {
-  --accent: #dc2626;
-  --accent-hover: #b91c1c;
-  --accent-rgb: 220, 38, 38;
-  --accent-light: rgba(220, 38, 38, 0.1);
-  --gradient-start: #ef4444;
-  --gradient-end: #b91c1c;
-  --border-glow: rgba(239, 68, 68, 0.3);
-  --glow-accent: 0 0 25px rgba(220, 38, 38, 0.25);
-  --border-color: rgba(245, 205, 205, 0.85);
-}
-
-[data-color-preset="violet"] {
-  --accent: #7c3aed;
-  --accent-hover: #6d28d9;
-  --accent-rgb: 124, 58, 237;
-  --accent-light: rgba(124, 58, 237, 0.1);
-  --gradient-start: #a855f7;
-  --gradient-end: #6d28d9;
-  --border-glow: rgba(168, 85, 247, 0.3);
-  --glow-accent: 0 0 25px rgba(124, 58, 237, 0.25);
-  --border-color: rgba(225, 210, 245, 0.85);
-}
-
-[data-color-preset="teal"] {
-  --accent: #0d9488;
-  --accent-hover: #0f766e;
-  --accent-rgb: 13, 148, 136;
-  --accent-light: rgba(13, 148, 136, 0.1);
-  --gradient-start: #14b8a6;
-  --gradient-end: #0f766e;
-  --border-glow: rgba(20, 184, 166, 0.3);
-  --glow-accent: 0 0 25px rgba(13, 148, 136, 0.25);
-  --border-color: rgba(205, 235, 230, 0.85);
-}
-
-/* ==========================================================================
-   COLOR PRESETS (DARK MODE OVERRIDES)
-   ========================================================================== */
-
-[data-theme="dark"][data-color-preset="amber"] {
-  --bg-primary: #170d06;
-  --bg-secondary: #24140a;
-  --border-color: rgba(65, 38, 20, 0.85);
-  --accent: #f97316;
-  --accent-hover: #fb923c;
-  --accent-rgb: 249, 115, 22;
-  --accent-light: rgba(249, 115, 22, 0.16);
-  --gradient-start: #fb923c;
-  --gradient-end: #ea580c;
-  --border-glow: rgba(249, 115, 22, 0.4);
-  --glow-accent: 0 0 30px rgba(249, 115, 22, 0.3);
-}
-
-[data-theme="dark"][data-color-preset="crimson"] {
-  --bg-primary: #170707;
-  --bg-secondary: #240c0c;
-  --border-color: rgba(65, 20, 20, 0.85);
-  --accent: #ef4444;
-  --accent-hover: #f87171;
-  --accent-rgb: 239, 68, 68;
-  --accent-light: rgba(239, 68, 68, 0.16);
-  --gradient-start: #f87171;
-  --gradient-end: #dc2626;
-  --border-glow: rgba(239, 68, 68, 0.4);
-  --glow-accent: 0 0 30px rgba(239, 68, 68, 0.3);
-}
-
-[data-theme="dark"][data-color-preset="violet"] {
-  --bg-primary: #0f0a17;
-  --bg-secondary: #171024;
-  --border-color: rgba(45, 28, 65, 0.85);
-  --accent: #a855f7;
-  --accent-hover: #c084fc;
-  --accent-rgb: 168, 85, 247;
-  --accent-light: rgba(168, 85, 247, 0.16);
-  --gradient-start: #c084fc;
-  --gradient-end: #7c3aed;
-  --border-glow: rgba(168, 85, 247, 0.4);
-  --glow-accent: 0 0 30px rgba(168, 85, 247, 0.3);
-}
-
-[data-theme="dark"][data-color-preset="teal"] {
-  --bg-primary: #061413;
-  --bg-secondary: #0a211f;
-  --border-color: rgba(20, 60, 56, 0.85);
-  --accent: #14b8a6;
-  --accent-hover: #2dd4bf;
-  --accent-rgb: 20, 184, 166;
-  --accent-light: rgba(20, 184, 166, 0.16);
-  --gradient-start: #2dd4bf;
-  --gradient-end: #0d9488;
-  --border-glow: rgba(20, 184, 166, 0.4);
-  --glow-accent: 0 0 30px rgba(20, 184, 166, 0.3);
 }
 
 body {
@@ -175,11 +105,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Multi-toned ambient mesh background */
 .mesh-bg {
   background-image: 
-    radial-gradient(at 10% 10%, rgba(var(--accent-rgb), 0.14) 0px, transparent 50%),
-    radial-gradient(at 90% 20%, rgba(var(--accent-rgb), 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 80%, rgba(var(--accent-rgb), 0.06) 0px, transparent 50%);
+    radial-gradient(at 8% 12%, rgba(var(--accent-rgb), 0.12) 0px, transparent 48%),
+    radial-gradient(at 92% 18%, rgba(var(--warm-rgb), 0.08) 0px, transparent 48%),
+    radial-gradient(at 50% 85%, rgba(2, 132, 199, 0.05) 0px, transparent 52%);
 }
 
 .glass-card {
@@ -198,9 +129,105 @@ body {
 }
 
 .gradient-title {
-  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--accent) 55%, var(--accent-hover) 100%);
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-mid) 50%, var(--gradient-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   MICRO-ANIMATIONS & INTERACTIVE STATES
+   ========================================================================== */
+
+/* Tactile button press feedback */
+.btn-press {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease, background-color 0.18s ease;
+}
+.btn-press:hover {
+  transform: translateY(-2px);
+}
+.btn-press:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* Interactive Card spring lift */
+.card-interactive {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-interactive:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+.card-interactive:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* Moving Light Shimmer on CTA Buttons */
+@keyframes shimmer {
+  0% { transform: skewX(-20deg) translateX(-180%); }
+  50%, 100% { transform: skewX(-20deg) translateX(250%); }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-20deg) translateX(-180%);
+  animation: shimmer 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Floating animation */
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float {
+  animation: subtle-float 4.5s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: subtle-float 4.5s ease-in-out 2.25s infinite;
+}
+
+/* Soft Pulsing glow */
+@keyframes soft-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.9; }
+}
+.animate-soft-pulse {
+  animation: soft-pulse 2.8s ease-in-out infinite;
+}
+
+/* Pop in for badges or quantity changes */
+@keyframes pop-in {
+  0% { transform: scale(0.75); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop {
+  animation: pop-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Smooth Fade Slide Up for sections/lists */
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-slide-up {
+  animation: fade-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Custom Scrollbars */

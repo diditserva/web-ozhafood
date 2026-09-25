@@ -91,7 +91,7 @@ export default function AdminNotificationBell() {
       <button
         type="button"
         onClick={handleOpenDropdown}
-        className={`relative w-9 h-9 flex items-center justify-center rounded-xl border transition-all outline-none focus:outline-none shrink-0 ${
+        className={`relative w-9 h-9 flex items-center justify-center rounded-xl border transition-all outline-none focus:outline-none shrink-0 btn-press ${
           isOpen
             ? 'bg-emerald-600/10 border-emerald-500 text-emerald-600 dark:text-emerald-400'
             : 'border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--accent-light)]'

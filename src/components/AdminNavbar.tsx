@@ -63,13 +63,13 @@ export default function AdminNavbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold whitespace-nowrap transition-all outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] shrink-0 ${
+                className={`flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold whitespace-nowrap transition-all outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] shrink-0 btn-press ${
                   isActive
                     ? 'bg-[var(--accent)] text-white shadow-sm shadow-[var(--accent)]/30'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--accent-light)]'
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" />
                 <span>{item.label}</span>
               </Link>
             );
@@ -81,7 +81,7 @@ export default function AdminNavbar() {
           <Link
             href="/"
             target="_blank"
-            className="hidden lg:flex items-center gap-1.5 h-9 px-3 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--accent)] hover:border-[var(--border-glow)] hover:bg-[var(--accent-light)] transition-all whitespace-nowrap outline-none focus:outline-none shrink-0"
+            className="hidden lg:flex items-center gap-1.5 h-9 px-3 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--accent)] hover:border-[var(--border-glow)] hover:bg-[var(--accent-light)] transition-all whitespace-nowrap outline-none focus:outline-none shrink-0 btn-press"
             title="Buka Halaman Pemesanan Pelanggan"
           >
             <span>Web Order</span>
@@ -93,7 +93,7 @@ export default function AdminNavbar() {
             type="button"
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="h-9 px-3 rounded-xl border border-red-500/20 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors flex items-center gap-1.5 whitespace-nowrap outline-none focus:outline-none shrink-0"
+            className="h-9 px-3 rounded-xl border border-red-500/20 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-all flex items-center gap-1.5 whitespace-nowrap outline-none focus:outline-none shrink-0 btn-press"
             title="Keluar dari Panel Admin"
           >
             {isLoggingOut ? (
@@ -116,7 +116,7 @@ export default function AdminNavbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors outline-none focus:outline-none ${
+                className={`flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all outline-none focus:outline-none btn-press ${
                   isActive
                     ? 'bg-[var(--accent)] text-white shadow-xs'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--accent-light)]'
@@ -132,7 +132,7 @@ export default function AdminNavbar() {
           type="button"
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="h-8 w-8 flex items-center justify-center rounded-lg text-red-500 hover:bg-red-500/10 shrink-0 outline-none focus:outline-none"
+          className="h-8 w-8 flex items-center justify-center rounded-lg text-red-500 hover:bg-red-500/10 shrink-0 outline-none focus:outline-none btn-press"
           title="Logout"
         >
           <LogOut className="w-4 h-4" />

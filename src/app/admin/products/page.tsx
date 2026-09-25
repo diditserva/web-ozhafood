@@ -192,14 +192,19 @@ export default function AdminProductsPage() {
         body: JSON.stringify(payload),
       });
 
-      const json = await res.json();
-
       if (res.status === 401) {
         window.location.href = '/admin/login?redirect=/admin/products';
         return;
       }
 
-      if (json.success) {
+      let json: any = null;
+      try {
+        json = await res.json();
+      } catch {
+        json = null;
+      }
+
+      if (res.ok && json?.success) {
         if (editingProduct) {
           setProducts((prev) => prev.map((p) => (p.id === editingProduct.id ? json.data : p)));
           setToast({ text: 'Menu berhasil diperbarui!', type: 'success' });
@@ -209,7 +214,7 @@ export default function AdminProductsPage() {
         }
         resetForm();
       } else {
-        setFormError(json.error || 'Gagal menyimpan menu');
+        setFormError(json?.error || `Gagal menyimpan menu (Status: ${res.status})`);
       }
     } catch (err: unknown) {
       const error = err as Error;
@@ -283,7 +288,7 @@ export default function AdminProductsPage() {
             resetForm();
             setShowAddModal(true);
           }}
-          className="px-5 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-[var(--accent)]/25 transition-all active:scale-95 shrink-0"
+          className="px-5 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-[var(--accent)]/25 transition-all btn-press shimmer-effect shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Tambah Menu Baru</span>
@@ -297,7 +302,7 @@ export default function AdminProductsPage() {
           <p className="text-sm font-semibold text-[var(--text-muted)]">Memuat daftar produk...</p>
         </div>
       ) : products.length === 0 ? (
-        <div className="glass-card p-12 text-center flex flex-col items-center justify-center">
+        <div className="glass-card card-interactive p-12 text-center flex flex-col items-center justify-center">
           <div className="w-16 h-16 rounded-2xl bg-[var(--accent-light)] border border-[var(--border-glow)] flex items-center justify-center text-[var(--accent)] mb-4">
             <Utensils className="w-8 h-8" />
           </div>
@@ -313,7 +318,7 @@ export default function AdminProductsPage() {
               resetForm();
               setShowAddModal(true);
             }}
-            className="px-5 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-[var(--accent)]/25 transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-[var(--accent)]/25 transition-all btn-press shimmer-effect"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Menu Sekarang</span>
@@ -324,7 +329,7 @@ export default function AdminProductsPage() {
           {products.map((p) => (
             <div
               key={p.id}
-              className={`glass-card p-5 flex flex-col justify-between transition-all duration-200 ${
+              className={`glass-card card-interactive p-5 flex flex-col justify-between transition-all duration-300 group ${
                 !p.isActive ? 'opacity-60 grayscale-50' : ''
               }`}
             >
@@ -338,7 +343,7 @@ export default function AdminProductsPage() {
                   <button
                     type="button"
                     onClick={() => handleToggleActive(p.id, p.isActive)}
-                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all btn-press ${
                       p.isActive
                         ? 'bg-[var(--accent-light)] text-[var(--accent)] border border-[var(--border-glow)]'
                         : 'bg-red-500/10 text-red-500 border border-red-500/20'
@@ -360,11 +365,11 @@ export default function AdminProductsPage() {
 
                 {/* Product Info */}
                 <div className="flex gap-4 items-start mb-4">
-                  <div className="w-16 h-16 rounded-xl bg-[var(--accent-light)] border border-[var(--border-color)] flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="w-16 h-16 rounded-xl bg-[var(--accent-light)] border border-[var(--border-color)] flex items-center justify-center shrink-0 overflow-hidden group-hover:scale-105 transition-transform duration-300">
                     <FoodImage src={p.imageUrl} alt={p.name} fallbackEmoji="🍱" />
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-base text-[var(--text-main)] font-[family-name:var(--font-heading)]">
+                    <h3 className="font-extrabold text-base text-[var(--text-main)] font-[family-name:var(--font-heading)] group-hover:text-[var(--accent)] transition-colors">
                       {p.name}
                     </h3>
                     <div className="text-sm font-extrabold text-[var(--accent)] font-[family-name:var(--font-heading)]">
@@ -382,7 +387,7 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={() => openEditModal(p)}
-                  className="flex-1 py-2 rounded-xl border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors"
+                  className="flex-1 py-2 rounded-xl border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all btn-press"
                 >
                   <Edit2 className="w-3.5 h-3.5 text-[var(--accent)]" />
                   <span>Edit Details</span>
@@ -390,7 +395,7 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={() => handleDeleteProduct(p.id, p.name)}
-                  className="p-2 rounded-xl border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-colors"
+                  className="p-2 rounded-xl border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-all btn-press"
                   title="Hapus Produk"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -404,7 +409,7 @@ export default function AdminProductsPage() {
       {/* Add / Edit Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="glass-card max-w-md w-full p-6 sm:p-8 relative">
+          <div className="glass-card card-interactive max-w-md w-full p-6 sm:p-8 relative animate-in zoom-in-95 fade-in duration-200">
             <button
               type="button"
               onClick={resetForm}
@@ -588,14 +593,14 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 py-3 rounded-xl border border-[var(--border-color)] text-xs font-bold hover:bg-[var(--bg-primary)] transition-all"
+                  className="flex-1 py-3 rounded-xl border border-[var(--border-color)] text-xs font-bold hover:bg-[var(--bg-primary)] transition-all btn-press"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:opacity-60 text-white text-xs font-bold shadow-md shadow-[var(--accent)]/25 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:opacity-60 text-white text-xs font-bold shadow-md shadow-[var(--accent)]/25 transition-all btn-press shimmer-effect flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>

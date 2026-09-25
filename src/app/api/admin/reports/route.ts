@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const targetDate = searchParams.get('targetDate'); // optional filter by targetDate
 
-    // 1. All Orders for metrics
-    const orders = await db.order.findMany({
-      include: { items: true },
-      orderBy: { targetDate: 'desc' },
-    });
+    // 1. All Orders for metrics & Products count
+    const [orders, totalProductsCount] = await Promise.all([
+      db.order.findMany({
+        include: { items: true },
+        orderBy: { targetDate: 'desc' },
+      }),
+      db.product.count(),
+    ]);
 
     // 2. Kitchen Portion Summary for targetDate (or all if not specified)
     const filteredOrders = targetDate
@@ -88,6 +94,7 @@ export async function GET(req: NextRequest) {
         summary: {
           totalRevenue,
           totalOrdersCount,
+          totalProductsCount,
           filteredOrdersCount: filteredOrders.length,
           filteredRevenue: filteredOrders
             .filter((o) => o.status !== 'CANCELLED')

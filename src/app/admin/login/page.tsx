@@ -59,7 +59,7 @@ function LoginForm() {
       </div>
 
       {/* Glassmorphism Login Card */}
-      <div className="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl border-emerald-600/20">
+      <div className="glass-card card-interactive p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl border-emerald-600/20 animate-in zoom-in-95 fade-in duration-300">
         {/* Glow accent */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -105,7 +105,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={isLoading || !password.trim()}
-            className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-1"
+            className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all btn-press shimmer-effect mt-1"
           >
             {isLoading ? (
               <>
@@ -121,7 +121,7 @@ function LoginForm() {
         <div className="mt-6 pt-5 border-t border-[var(--border-color)] text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)] hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)] hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors btn-press"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Kembali ke Halaman Pemesanan</span>

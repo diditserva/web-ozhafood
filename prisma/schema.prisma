@@ -62,8 +62,14 @@ model Order {
   id            String      @id @default(uuid())
   orderCode     String      @unique @map("order_code")
   customerName  String      @map("customer_name")
+  customerPhone String?     @map("customer_phone")
+  orderType     String      @default("VOZA") @map("order_type")
   division      String
   location      String
+  addressDetail String?     @map("address_detail") @db.Text
+  mapUrl        String?     @map("map_url")
+  latitude      Float?
+  longitude     Float?
   targetDate    DateTime    @map("target_date") @db.Date
   notes         String?     @db.Text
   totalAmount   Int         @map("total_amount")
@@ -78,6 +84,7 @@ model Order {
   @@index([createdAt])
   @@index([division])
   @@index([status])
+  @@index([orderType])
   @@map("orders")
 }
 

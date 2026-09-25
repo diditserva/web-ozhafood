@@ -20,6 +20,9 @@ import {
   Building2,
   MapPin,
   FileText,
+  Phone,
+  ExternalLink,
+  Navigation,
 } from 'lucide-react';
 import { formatRupiah, formatDateIndo } from '@/lib/constants';
 
@@ -146,15 +149,23 @@ function OrdersContent() {
         .map((it) => `${it.productName} (${it.quantity}x)`)
         .join(', ');
 
+      const phoneMatch = o.notes?.match(/\[WA:\s*([^\]]+)\]/);
+      const cleanPhone = phoneMatch ? phoneMatch[1] : '-';
+      const cleanNotes = o.notes
+        ?.replace(/\[WA:\s*[^\]]+\]/g, '')
+        .replace(/\[Peta:\s*[^\]]+\]/g, '')
+        .trim() || '-';
+
       return {
         No: idx + 1,
         'No. Order': `#${o.orderCode}`,
         'Nama Pemesan': o.customerName,
+        'No. WhatsApp': cleanPhone,
         Divisi: o.division,
         'Lokasi Antar': o.location,
         'Tanggal Pesanan Dibuatkan': new Date(o.targetDate).toLocaleDateString('id-ID'),
         'Daftar Menu': itemsListStr,
-        'Catatan Khusus': o.notes || '-',
+        'Catatan Khusus': cleanNotes,
         'Total Pembayaran (Rp)': o.totalAmount,
         'Metode Bayar': o.paymentMethod,
         'Status Pesanan': o.status,
@@ -225,7 +236,7 @@ function OrdersContent() {
           <button
             type="button"
             onClick={fetchOrders}
-            className="p-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold hover:border-[var(--accent)] transition-all"
+            className="p-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold hover:border-[var(--accent)] btn-press cursor-pointer transition-all"
             title="Refresh Data"
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-[var(--accent)]' : ''}`} />
@@ -233,7 +244,7 @@ function OrdersContent() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold flex items-center gap-1.5 hover:border-[var(--accent)] transition-all"
+            className="px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-xs font-bold flex items-center gap-1.5 hover:border-[var(--accent)] hover:shadow-sm btn-press cursor-pointer transition-all"
           >
             <Printer className="w-4 h-4 text-[var(--accent)]" />
             <span>Cetak Rekap Dapur</span>
@@ -241,7 +252,7 @@ function OrdersContent() {
           <button
             type="button"
             onClick={handleExportExcel}
-            className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[var(--accent)]/20 transition-all"
+            className="px-4 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[var(--accent)]/20 hover:shadow-lg hover:shadow-[var(--accent)]/30 btn-press shimmer-effect cursor-pointer transition-all"
           >
             <Download className="w-4 h-4" />
             <span>Export Excel (.xlsx)</span>
@@ -250,7 +261,7 @@ function OrdersContent() {
       </div>
 
       {/* KITCHEN PORTION SUMMARY CARD */}
-      <div className="glass-card p-6 border-l-4 border-l-[var(--accent)]">
+      <div className="glass-card p-6 border-l-4 border-l-[var(--accent)] card-interactive">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center font-bold">
@@ -284,12 +295,12 @@ function OrdersContent() {
             {kitchenPortions.map((kp) => (
               <div
                 key={kp.name}
-                className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between"
+                className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-between hover:border-[var(--accent)]/40 hover:-translate-y-0.5 hover:shadow-xs btn-press cursor-default transition-all"
               >
                 <span className="text-xs sm:text-sm font-bold text-[var(--text-main)] truncate mr-2">
                   {kp.name}
                 </span>
-                <span className="px-2.5 py-1 rounded-lg bg-[var(--accent)] text-white font-extrabold text-xs sm:text-sm font-[family-name:var(--font-heading)] shrink-0 shadow-sm">
+                <span className="px-2.5 py-1 rounded-lg bg-[var(--accent)] text-white font-extrabold text-xs sm:text-sm font-[family-name:var(--font-heading)] shrink-0 shadow-sm animate-pop">
                   {kp.qty} porsi
                 </span>
               </div>
@@ -308,9 +319,9 @@ function OrdersContent() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && fetchOrders()}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs outline-none focus:border-[var(--accent)]"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all"
           />
-          <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
         {/* Date Filter */}
@@ -319,7 +330,7 @@ function OrdersContent() {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-semibold outline-none focus:border-[var(--accent)] cursor-pointer"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-semibold outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all cursor-pointer"
           />
           <Calendar className="w-4 h-4 text-[var(--accent)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
@@ -329,7 +340,7 @@ function OrdersContent() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-medium outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 text-xs font-medium outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all cursor-pointer appearance-none"
           >
             <option value="">Semua Status</option>
             <option value="PENDING">Menunggu Bayar</option>
@@ -350,7 +361,7 @@ function OrdersContent() {
               setSelectedStatus('');
               setSearchQuery('');
             }}
-            className="text-xs font-bold text-[var(--accent)] hover:underline px-2 py-1"
+            className="text-xs font-bold text-[var(--accent)] hover:underline px-2 py-1 btn-press cursor-pointer"
           >
             Reset Filter
           </button>
@@ -386,67 +397,103 @@ function OrdersContent() {
                   </td>
                 </tr>
               ) : (
-                orders.map((o) => (
-                  <tr key={o.id} className="hover:bg-[var(--bg-primary)]/40 transition-colors">
-                    {/* Order Code */}
-                    <td className="p-4 align-top">
-                      <span className="font-mono font-bold text-[var(--accent)] block">
-                        #{o.orderCode}
-                      </span>
-                      <span className="text-[11px] text-[var(--text-muted)]">
-                        {new Date(o.createdAt).toLocaleTimeString('id-ID', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </span>
-                    </td>
+                orders.map((o) => {
+                  const phoneMatch = o.notes?.match(/\[WA:\s*([^\]]+)\]/);
+                  const mapsMatch = o.notes?.match(/\[Peta:\s*([^\]]+)\]/);
+                  const cleanNotes = o.notes
+                    ?.replace(/\[WA:\s*[^\]]+\]/g, '')
+                    .replace(/\[Peta:\s*[^\]]+\]/g, '')
+                    .trim();
 
-                    {/* Customer Info */}
-                    <td className="p-4 align-top">
-                      <div className="font-bold text-[var(--text-main)]">{o.customerName}</div>
-                      <div className="flex items-center gap-1 text-xs text-[var(--text-muted)] mt-0.5">
-                        <Building2 className="w-3 h-3 shrink-0" />
-                        <span>{o.division}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
-                        <MapPin className="w-3 h-3 shrink-0" />
-                        <span>{o.location}</span>
-                      </div>
-                    </td>
+                  return (
+                    <tr key={o.id} className="hover:bg-[var(--bg-primary)]/40 transition-colors">
+                      {/* Order Code */}
+                      <td className="p-4 align-top">
+                        <span className="font-mono font-bold text-[var(--accent)] block">
+                          #{o.orderCode}
+                        </span>
+                        <span className="text-[11px] text-[var(--text-muted)]">
+                          {new Date(o.createdAt).toLocaleTimeString('id-ID', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                      </td>
 
-                    {/* Target Date */}
-                    <td className="p-4 align-top">
-                      <div className="font-semibold text-[var(--accent)] text-xs">
-                        {formatDateIndo(o.targetDate)}
-                      </div>
-                    </td>
+                      {/* Customer Info */}
+                      <td className="p-4 align-top">
+                        <div className="font-bold text-[var(--text-main)]">{o.customerName}</div>
 
-                    {/* Ordered Items */}
-                    <td className="p-4 align-top">
-                      <div className="flex flex-col gap-1">
-                        {o.items.map((it) => (
-                          <div key={it.id} className="flex items-center gap-1.5 text-xs">
-                            <span className="font-bold px-1.5 py-0.5 rounded bg-[var(--accent-light)] text-[var(--accent)]">
-                              {it.quantity}x
-                            </span>
-                            <span className="text-[var(--text-main)] font-medium">
-                              {it.productName}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </td>
+                        {phoneMatch && (
+                          <a
+                            href={`https://wa.me/${phoneMatch[1].replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline mt-0.5 btn-press"
+                            title="Klik untuk chat WhatsApp pemesan"
+                          >
+                            <Phone className="w-3 h-3" />
+                            <span>{phoneMatch[1]}</span>
+                          </a>
+                        )}
 
-                    {/* Notes */}
-                    <td className="p-4 align-top max-w-xs">
-                      {o.notes ? (
-                        <div className="text-xs text-[var(--text-muted)] bg-[var(--bg-primary)] p-2 rounded-lg border border-[var(--border-color)]">
-                          {o.notes}
+                        <div className="flex items-center gap-1 text-xs text-[var(--text-muted)] mt-1">
+                          <Building2 className="w-3 h-3 shrink-0" />
+                          <span className="truncate">{o.division}</span>
                         </div>
-                      ) : (
-                        <span className="text-xs text-[var(--text-muted)] opacity-50">-</span>
-                      )}
-                    </td>
+
+                        <div className="flex items-start gap-1 text-xs text-[var(--text-muted)] mt-0.5">
+                          <MapPin className="w-3 h-3 shrink-0 mt-0.5" />
+                          <span className="line-clamp-2">{o.location}</span>
+                        </div>
+
+                        {mapsMatch && (
+                          <a
+                            href={mapsMatch[1]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--accent)] hover:underline mt-1 bg-[var(--accent-light)] px-2 py-0.5 rounded-md btn-press hover:scale-105 transition-transform"
+                          >
+                            <Navigation className="w-3 h-3" />
+                            <span>Lihat di Maps</span>
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        )}
+                      </td>
+
+                      {/* Target Date */}
+                      <td className="p-4 align-top">
+                        <div className="font-semibold text-[var(--accent)] text-xs">
+                          {formatDateIndo(o.targetDate)}
+                        </div>
+                      </td>
+
+                      {/* Ordered Items */}
+                      <td className="p-4 align-top">
+                        <div className="flex flex-col gap-1">
+                          {o.items.map((it) => (
+                            <div key={it.id} className="flex items-center gap-1.5 text-xs">
+                              <span className="font-bold px-1.5 py-0.5 rounded bg-[var(--accent-light)] text-[var(--accent)] hover:scale-105 transition-transform">
+                                {it.quantity}x
+                              </span>
+                              <span className="text-[var(--text-main)] font-medium">
+                                {it.productName}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+
+                      {/* Notes */}
+                      <td className="p-4 align-top max-w-xs">
+                        {cleanNotes ? (
+                          <div className="text-xs text-[var(--text-muted)] bg-[var(--bg-primary)] p-2 rounded-lg border border-[var(--border-color)] whitespace-pre-wrap">
+                            {cleanNotes}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-[var(--text-muted)] opacity-50">-</span>
+                        )}
+                      </td>
 
                     {/* Total */}
                     <td className="p-4 align-top">
@@ -465,7 +512,7 @@ function OrdersContent() {
                         <select
                           value={o.status}
                           onChange={(e) => handleStatusChange(o.id, e.target.value)}
-                          className="mt-1 text-xs py-1 px-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-main)] outline-none focus:border-[var(--accent)] cursor-pointer print:hidden"
+                          className="mt-1 text-xs py-1 px-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-main)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 btn-press cursor-pointer print:hidden transition-all"
                         >
                           <option value="PENDING">Ubah: Menunggu</option>
                           <option value="CONFIRMED">Ubah: Konfirmasi</option>
@@ -476,8 +523,9 @@ function OrdersContent() {
                       </div>
                     </td>
                   </tr>
-                ))
-              )}
+                );
+              })
+            )}
             </tbody>
           </table>
         </div>
