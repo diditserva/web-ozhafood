@@ -151,19 +151,22 @@ export default function CustomerOrderPage() {
   const [paymentTab, setPaymentTab] = useState<'qris' | 'bank'>('qris');
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
   const [showQrZoom, setShowQrZoom] = useState(false);
+  const [qrisUrl, setQrisUrl] = useState<string>(QRIS_IMAGE_DATA);
 
   useEffect(() => {
     async function initData() {
       try {
-        const [resProd, resDiv, resLoc] = await Promise.all([
+        const [resProd, resDiv, resLoc, resInit] = await Promise.all([
           fetch('/api/admin/products'),
           fetch('/api/admin/divisions'),
           fetch('/api/admin/locations'),
+          fetch('/api/init'),
         ]);
 
         const jsonProd = await resProd.json();
         const jsonDiv = await resDiv.json();
         const jsonLoc = await resLoc.json();
+        const jsonInit = await resInit.json().catch(() => null);
 
         if (jsonProd.success && jsonProd.data) {
           setProducts(jsonProd.data);
@@ -173,6 +176,9 @@ export default function CustomerOrderPage() {
         }
         if (jsonLoc.success && jsonLoc.data && jsonLoc.data.length > 0) {
           setLocations(jsonLoc.data.map((l: any) => l.name));
+        }
+        if (jsonInit?.success && jsonInit.data?.qrisUrl) {
+          setQrisUrl(jsonInit.data.qrisUrl);
         }
       } catch (err) {
         console.error('Failed loading data from API', err);
@@ -457,37 +463,98 @@ Berikut bukti pembayarannya. Terima kasih!`;
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => setShowQrZoom(true)}
+              className="h-9 px-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 hover:bg-[var(--accent-light)] hover:border-[var(--border-glow)] text-xs font-bold flex items-center gap-1.5 transition-all btn-press text-[var(--text-main)]"
+              title="Lihat Barcode QRIS Pembayaran"
+            >
+              <QrCode className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span className="hidden sm:inline">QRIS Toko</span>
+            </button>
             <ThemeToggle />
           </div>
         </header>
 
-        {/* Hero Banner Section */}
+        {/* Hero Banner Section with Embedded QRIS Showcase */}
         <section className="relative overflow-hidden rounded-3xl border border-[var(--border-color)] bg-gradient-to-br from-[var(--accent-light)] via-transparent to-transparent p-6 sm:p-10 mb-10 shadow-xl backdrop-blur-md">
           <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-[var(--accent-light)] rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] border border-[var(--border-glow)] text-[var(--accent)] text-xs font-bold mb-4">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Dibuat Segar Sesuai Pesanan Anda</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-main)] font-[family-name:var(--font-heading)] leading-tight mb-3">
-              Cita Rasa Otentik, <span className="gradient-title">Dibuat Spesial</span> untuk Harimu.
-            </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed mb-6">
-              Pilih menu homemade favoritmu, tentukan tanggal antar yang kamu inginkan, dan biarkan dapur kami memasak hidangan hangat dan higienis untukmu.
-            </p>
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div className="flex-1 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] border border-[var(--border-glow)] text-[var(--accent)] text-xs font-bold mb-4">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Dibuat Segar Sesuai Pesanan Anda</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-main)] font-[family-name:var(--font-heading)] leading-tight mb-3">
+                Cita Rasa Otentik, <span className="gradient-title">Dibuat Spesial</span> untuk Harimu.
+              </h2>
+              <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed mb-6">
+                Pilih menu homemade favoritmu, tentukan tanggal antar yang kamu inginkan, dan biarkan dapur kami memasak hidangan hangat dan higienis untukmu.
+              </p>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[var(--text-main)]">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm btn-press cursor-default hover:border-emerald-500/40">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>100% Halal & Higienis</span>
+              <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[var(--text-main)]">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm btn-press cursor-default hover:border-emerald-500/40">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span>100% Halal & Higienis</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm btn-press cursor-default hover:border-sky-500/40">
+                  <Truck className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                  <span>Antar ke Divisi Kantor Gratis</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm btn-press cursor-default hover:border-amber-500/40">
+                  <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                  <span>Resep Khas Homemade</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm btn-press cursor-default hover:border-sky-500/40">
-                <Truck className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-                <span>Antar ke Divisi Kantor Gratis</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)]/80 border border-[var(--border-color)] shadow-sm btn-press cursor-default hover:border-amber-500/40">
-                <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                <span>Resep Khas Homemade</span>
+            </div>
+
+            {/* Prominent QRIS Showcase in Hero */}
+            <div className="shrink-0 w-full sm:w-auto self-center lg:self-auto">
+              <div className="glass-card card-interactive p-4 sm:p-5 rounded-2xl flex flex-col items-center gap-3 border border-[var(--border-color)] shadow-lg bg-[var(--bg-glass)]/90 text-center">
+                <div className="flex items-center gap-1.5 text-xs font-extrabold text-[var(--text-main)]">
+                  <QrCode className="w-4 h-4 text-[var(--accent)]" />
+                  <span>Scan & Bayar QRIS</span>
+                </div>
+
+                <div
+                  onClick={() => setShowQrZoom(true)}
+                  className="w-36 h-36 sm:w-40 sm:h-40 bg-white p-2.5 rounded-2xl shadow-sm border border-stone-200 relative group cursor-pointer overflow-hidden flex items-center justify-center"
+                  title="Klik untuk perbesar barcode QRIS"
+                >
+                  <img
+                    src={qrisUrl}
+                    alt="Barcode QRIS Toko"
+                    className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[11px] font-bold gap-1 backdrop-blur-xs">
+                    <Maximize2 className="w-4 h-4" />
+                    <span>Perbesar</span>
+                  </div>
+                </div>
+
+                <span className="text-[10px] font-semibold text-[var(--text-muted)] max-w-[160px] leading-tight">
+                  BCA • GoPay • OVO • DANA • ShopeePay • Semua Bank
+                </span>
+
+                <div className="flex items-center gap-2 w-full">
+                  <button
+                    type="button"
+                    onClick={() => setShowQrZoom(true)}
+                    className="flex-1 py-1.5 px-2.5 rounded-xl border border-[var(--border-color)] text-[11px] font-bold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all btn-press text-[var(--text-main)]"
+                  >
+                    Perbesar
+                  </button>
+                  <a
+                    href={qrisUrl}
+                    download="QRIS_OzhaFood"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-1.5 px-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[11px] font-bold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all btn-press text-[var(--text-main)] inline-flex items-center justify-center gap-1"
+                  >
+                    <Download className="w-3 h-3" />
+                    <span>Unduh</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -513,15 +580,26 @@ Berikut bukti pembayarannya. Terima kasih!`;
               <div className="text-[11px] text-[var(--text-muted)]">Pilih hari pengantaran pesanan</div>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm card-interactive hover:border-sky-500/40 cursor-default group">
+          <button
+            type="button"
+            onClick={() => setShowQrZoom(true)}
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/40 shadow-sm card-interactive hover:border-sky-500/40 text-left btn-press group w-full cursor-pointer"
+            title="Klik untuk melihat barcode QRIS pembayaran"
+          >
             <div className="w-8 h-8 rounded-xl bg-sky-500/10 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/20 font-black text-xs flex items-center justify-center group-hover:scale-110 transition-transform">
               3
             </div>
-            <div>
-              <div className="text-xs font-bold text-[var(--text-main)] group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">Konfirmasi & Bayar</div>
-              <div className="text-[11px] text-[var(--text-muted)]">Scan QRIS atau transfer bank instan</div>
+            <div className="flex-1">
+              <div className="text-xs font-bold text-[var(--text-main)] group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors flex items-center justify-between">
+                <span>Konfirmasi & Bayar</span>
+                <span className="text-[10px] text-sky-600 dark:text-sky-400 font-extrabold flex items-center gap-0.5">
+                  <QrCode className="w-3 h-3" />
+                  <span>Buka QRIS</span>
+                </span>
+              </div>
+              <div className="text-[11px] text-[var(--text-muted)]">Scan QRIS toko atau transfer bank instan</div>
             </div>
-          </div>
+          </button>
         </div>
 
         <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1079,6 +1157,39 @@ Berikut bukti pembayarannya. Terima kasih!`;
                   </>
                 )}
               </button>
+
+              {/* QRIS Quick Preview in Sidebar */}
+              <div className="pt-2 border-t border-[var(--border-color)]">
+                <button
+                  type="button"
+                  onClick={() => setShowQrZoom(true)}
+                  className="w-full p-3 rounded-2xl bg-[var(--bg-secondary)]/70 hover:bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--accent)] transition-all flex items-center gap-3.5 text-left group cursor-pointer btn-press"
+                  title="Klik untuk melihat dan scan barcode QRIS"
+                >
+                  <div className="w-14 h-14 bg-white rounded-xl p-1 shadow-sm border border-stone-200 shrink-0 relative overflow-hidden flex items-center justify-center">
+                    <img
+                      src={qrisUrl}
+                      alt="QRIS Mini Preview"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform"
+                    />
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors">
+                      <QrCode className="w-3.5 h-3.5 text-[var(--accent)]" />
+                      <span>Pembayaran via QRIS</span>
+                    </div>
+                    <p className="text-[11px] text-[var(--text-muted)] line-clamp-1 mt-0.5">
+                      BCA, GoPay, OVO, ShopeePay & Bank
+                    </p>
+                    <span className="text-[10px] font-extrabold text-[var(--accent)] flex items-center gap-1 mt-1">
+                      Klik untuk perbesar barcode &rarr;
+                    </span>
+                  </div>
+                </button>
+              </div>
             </section>
           </div>
         </main>
@@ -1227,7 +1338,7 @@ Berikut bukti pembayarannya. Terima kasih!`;
 
                   <div className="w-48 h-48 bg-white p-3 rounded-xl shadow-md border border-stone-200 relative group flex items-center justify-center">
                     <img
-                      src={QRIS_IMAGE_DATA}
+                      src={qrisUrl}
                       alt="QRIS Ozha Food"
                       className="w-full h-full object-contain"
                     />
@@ -1237,15 +1348,17 @@ Berikut bukti pembayarannya. Terima kasih!`;
                     <button
                       type="button"
                       onClick={() => setShowQrZoom(true)}
-                      className="flex-1 py-2 px-3 rounded-lg border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors"
+                      className="flex-1 py-2 px-3 rounded-lg border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors btn-press"
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
                       <span>Perbesar</span>
                     </button>
                     <a
-                      href={QRIS_IMAGE_DATA}
-                      download="QRIS_OzhaFood.svg"
-                      className="flex-1 py-2 px-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors"
+                      href={qrisUrl}
+                      download="QRIS_OzhaFood"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-2 px-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-bold flex items-center justify-center gap-1.5 hover:border-[var(--accent)] transition-colors btn-press"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Unduh QR</span>
@@ -1325,7 +1438,7 @@ Berikut bukti pembayarannya. Terima kasih!`;
             >
               <X className="w-4 h-4" />
             </button>
-            <img src={QRIS_IMAGE_DATA} alt="QRIS Ozha Food" className="w-full h-auto" />
+            <img src={qrisUrl} alt="QRIS Ozha Food" className="w-full h-auto max-h-[70vh] object-contain rounded-xl" />
             <p className="text-xs text-stone-600 font-bold text-center">
               Scan langsung dari kamera HP atau m-Banking Anda
             </p>

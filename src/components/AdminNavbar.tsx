@@ -28,7 +28,7 @@ export default function AdminNavbar() {
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/orders', label: 'Pesanan & Dapur', icon: ShoppingBag },
     { href: '/admin/products', label: 'Kelola Menu', icon: Utensils },
-    { href: '/admin/settings', label: 'Divisi & Lokasi', icon: Settings },
+    { href: '/admin/settings', label: 'Pengaturan & QRIS', icon: Settings },
   ];
 
   return (

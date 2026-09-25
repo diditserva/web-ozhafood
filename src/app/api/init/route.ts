@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { getAppSettings } from '@/lib/settings';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   try {
-    const [products, divisions, locations] = await Promise.all([
+    const [products, divisions, locations, settings] = await Promise.all([
       db.product.findMany({
         where: { isActive: true },
         orderBy: { name: 'asc' },
@@ -16,6 +20,7 @@ export async function GET() {
         where: { isActive: true },
         orderBy: { name: 'asc' },
       }),
+      getAppSettings(),
     ]);
 
     return NextResponse.json({
@@ -24,6 +29,7 @@ export async function GET() {
         products,
         divisions: divisions.map((d) => d.name),
         locations: locations.map((l) => l.name),
+        qrisUrl: settings.qrisUrl,
       },
     });
   } catch (error: unknown) {
